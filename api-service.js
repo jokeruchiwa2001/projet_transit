@@ -1,5 +1,6 @@
 // Service pour gérer les appels à l'API JSON externe
 const API_CONFIG = require('./config');
+const fetch = require('node-fetch');
 
 class ApiService {
   
