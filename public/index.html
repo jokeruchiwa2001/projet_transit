@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TransCargo - Gestion de Cargaisons</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-ship"></i>
+                <h1>TransCargo</h1>
+            </div>
+            <nav class="nav">
+                <a href="#accueil" class="nav-link active" data-section="accueil">
+                    <i class="fas fa-home"></i> Accueil
+                </a>
+                <a href="#" class="nav-link" id="gestionnaire-link">
+                    <i class="fas fa-user-tie"></i> Espace Gestionnaire
+                </a>
+                <a href="#suivi" class="nav-link" data-section="suivi">
+                    <i class="fas fa-search"></i> Suivi Colis
+                </a>
+
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <!-- Section Accueil -->
+        <section id="accueil" class="section active">
+            <div class="container">
+                <div class="hero">
+                    <h2>Bienvenue sur TransCargo</h2>
+                    <p>Votre solution complète pour la gestion de cargaisons maritimes, aériennes et routières</p>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <i class="fas fa-ship"></i>
+                            <h3>Transport Maritime</h3>
+                            <p>Gestion des cargaisons par voie maritime avec suivi en temps réel</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-plane"></i>
+                            <h3>Transport Aérien</h3>
+                            <p>Expéditions rapides par voie aérienne pour vos envois urgents</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-truck"></i>
+                            <h3>Transport Routier</h3>
+                            <p>Solutions terrestres flexibles et économiques</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <h3>Traçabilité GPS</h3>
+                            <p>Suivi géolocalisé avec Google Maps intégré</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- Section Suivi -->
+        <section id="suivi" class="section">
+            <div class="container">
+                <div class="suivi-section">
+                    <h2><i class="fas fa-search"></i> Suivi de Colis</h2>
+                    <p>Entrez votre code de suivi pour connaître l'état de votre colis</p>
+                    
+                    <form id="form-suivi" class="suivi-form">
+                        <div class="form-group">
+                            <input type="text" id="code-suivi" placeholder="Entrez votre code de suivi" required>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search"></i> Suivre
+                            </button>
+                        </div>
+                    </form>
+
+                    <div id="resultat-suivi" class="suivi-results"></div>
+                </div>
+            </div>
+        </section>
+
+
+    </main>
+
+    <!-- Modal pour les détails -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app_simple.js"></script>
+</body>
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration - TransCargo</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet CSS et JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-ship"></i>
+                <h1>TransCargo Admin</h1>
+            </div>
+            <nav class="nav">
+                <a href="#cargaisons" class="nav-link active" data-section="cargaisons">
+                    <i class="fas fa-boxes"></i> Cargaisons
+                </a>
+                <a href="#colis" class="nav-link" data-section="colis">
+                    <i class="fas fa-box"></i> Nouveau Colis
+                </a>
+                <a href="#recherche" class="nav-link" data-section="recherche">
+                    <i class="fas fa-search"></i> Recherche
+                </a>
+                <a href="#statistiques" class="nav-link" data-section="statistiques">
+                    <i class="fas fa-chart-bar"></i> Statistiques
+                </a>
+                <button class="btn btn-danger" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Déconnexion
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <!-- Section Cargaisons -->
+        <section id="cargaisons" class="section active">
+            <div class="container">
+                <h2>Gestion des Cargaisons</h2>
+                
+                <div class="form-section">
+                    <h3><i class="fas fa-plus"></i> Créer une nouvelle cargaison</h3>
+                    <form id="form-nouvelle-cargaison" class="form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="type-cargaison">Type de transport :</label>
+                                <select id="type-cargaison" required>
+                                    <option value="">Sélectionner...</option>
+                                    <option value="maritime">Maritime</option>
+                                    <option value="aerienne">Aérienne</option>
+                                    <option value="routiere">Routière</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="poids-max">Poids maximum (kg) :</label>
+                                <input type="number" id="poids-max" min="1" value="1000" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Lieu de départ :</label>
+                                <div class="location-input">
+                                    <input type="text" id="lieu-depart-display" readonly placeholder="Cliquez pour sélectionner sur la carte">
+                                    <button type="button" id="btn-select-depart" class="btn btn-secondary">
+                                        <i class="fas fa-map-marker-alt"></i> Sélectionner sur la carte
+                                    </button>
+                                    <input type="hidden" id="lieu-depart-lat">
+                                    <input type="hidden" id="lieu-depart-lng">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Lieu d'arrivée :</label>
+                                <div class="location-input">
+                                    <input type="text" id="lieu-arrivee-display" readonly placeholder="Cliquez pour sélectionner sur la carte">
+                                    <button type="button" id="btn-select-arrivee" class="btn btn-secondary">
+                                        <i class="fas fa-map-marker-alt"></i> Sélectionner sur la carte
+                                    </button>
+                                    <input type="hidden" id="lieu-arrivee-lat">
+                                    <input type="hidden" id="lieu-arrivee-lng">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Créer la cargaison
+                        </button>
+                    </form>
+                </div>
+
+                <div class="cargaisons-list">
+                    <h3><i class="fas fa-list"></i> Cargaisons existantes</h3>
+                    <div id="liste-cargaisons" class="cards-grid">
+                        <!-- Les cargaisons seront affichées ici -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Nouveau Colis -->
+        <section id="colis" class="section">
+            <div class="container">
+                <h2>Enregistrer un nouveau colis</h2>
+                
+                <form id="form-nouveau-colis" class="form">
+                    <div class="form-section">
+                        <h4>Informations de l'expéditeur</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="exp-prenom">Prénom :</label>
+                                <input type="text" id="exp-prenom" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="exp-nom">Nom :</label>
+                                <input type="text" id="exp-nom" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="exp-telephone">Téléphone :</label>
+                                <input type="tel" id="exp-telephone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="exp-email">Email (optionnel) :</label>
+                                <input type="email" id="exp-email">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="exp-adresse">Adresse :</label>
+                            <textarea id="exp-adresse" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4>Informations du destinataire</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="dest-nom">Nom complet :</label>
+                                <input type="text" id="dest-nom" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="dest-telephone">Téléphone :</label>
+                                <input type="tel" id="dest-telephone" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="dest-adresse">Adresse :</label>
+                            <textarea id="dest-adresse" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4>Informations du colis</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="colis-nombre">Nombre de colis :</label>
+                                <input type="number" id="colis-nombre" min="1" value="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="colis-poids">Poids total (kg) :</label>
+                                <input type="number" id="colis-poids" min="0.1" step="0.1" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="colis-type-produit">Type de produit :</label>
+                                <select id="colis-type-produit" required>
+                                    <option value="">Sélectionner...</option>
+                                    <option value="alimentaire">Alimentaire</option>
+                                    <option value="materiel">Matériel</option>
+                                    <option value="chimique">Chimique</option>
+                                    <option value="fragile">Fragile</option>
+                                    <option value="autre">Autre</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="colis-type-cargaison">Type de transport :</label>
+                                <select id="colis-type-cargaison" required>
+                                    <option value="">Sélectionner...</option>
+                                    <option value="maritime">Maritime</option>
+                                    <option value="aerienne">Aérienne</option>
+                                    <option value="routiere">Routière</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="colis-cargaison">Cargaison disponible : *</label>
+                            <select id="colis-cargaison" required>
+                                <option value="">-- Veuillez sélectionner une cargaison --</option>
+                            </select>
+                        </div>
+                        <div id="cargaison-info" style="display: none; background: #f8f9fa; padding: 15px; border-radius: 5px; margin-top: 10px;">
+                            <h5 style="margin-bottom: 10px; color: #495057;">Cargaisons disponibles :</h5>
+                            <div id="cargaison-list"></div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Enregistrer le colis
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Section Recherche -->
+        <section id="recherche" class="section">
+            <div class="container">
+                <h2>Recherche et Gestion</h2>
+                
+                <div class="search-tabs">
+                    <button class="search-tab-button active" data-search-tab="colis-search">Recherche Colis</button>
+                    <button class="search-tab-button" data-search-tab="cargaison-search">Recherche Cargaison</button>
+                </div>
+
+                <div id="colis-search" class="search-tab-content active">
+                    <form id="form-recherche-colis" class="form">
+                        <div class="form-group">
+                            <label for="search-code-colis">Code du colis :</label>
+                            <input type="text" id="search-code-colis" placeholder="Ex: COL-ABC123">
+                        </div>
+                        <button type="submit" class="btn btn-secondary">
+                            <i class="fas fa-search"></i> Rechercher
+                        </button>
+                    </form>
+                    <div id="resultat-colis" class="search-results"></div>
+                </div>
+
+                <div id="cargaison-search" class="search-tab-content">
+                    <form id="form-recherche-cargaison" class="form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="search-code-cargaison">Code cargaison :</label>
+                                <input type="text" id="search-code-cargaison" placeholder="Ex: CG-ABC123">
+                            </div>
+                            <div class="form-group">
+                                <label for="search-type">Type :</label>
+                                <select id="search-type">
+                                    <option value="">Tous</option>
+                                    <option value="maritime">Maritime</option>
+                                    <option value="aerienne">Aérienne</option>
+                                    <option value="routiere">Routière</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-secondary">
+                            <i class="fas fa-search"></i> Rechercher
+                        </button>
+                    </form>
+                    <div id="resultat-cargaison" class="search-results"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Statistiques -->
+        <section id="statistiques" class="section">
+            <div class="container">
+                <h2><i class="fas fa-chart-bar"></i> Statistiques</h2>
+                
+                <div class="stats-grid" id="stats-grid">
+                    <!-- Les statistiques seront affichées ici -->
+                </div>
+
+                <div class="charts-section">
+                    <div class="chart-container">
+                        <h3>Répartition par type de transport</h3>
+                        <canvas id="transport-chart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>États des colis</h3>
+                        <canvas id="colis-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal pour la sélection de lieu -->
+    <div id="map-modal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <span class="close" onclick="closeMapModal()">&times;</span>
+            <h3 id="map-modal-title">Sélectionner un lieu</h3>
+            <div id="map" style="height: 400px; width: 100%; margin: 1rem 0;"></div>
+            <div style="text-align: center; margin-top: 1rem;">
+                <button class="btn btn-primary" onclick="confirmLocation()">
+                    <i class="fas fa-check"></i> Confirmer la sélection
+                </button>
+                <button class="btn btn-secondary" onclick="closeMapModal()">
+                    <i class="fas fa-times"></i> Annuler
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal principal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <style>
+        .location-input {
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-end;
+        }
+        
+        .location-input input[type="text"] {
+            flex: 1;
+        }
+        
+        .location-input button {
+            white-space: nowrap;
+        }
+        
+        #map {
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .nav button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            margin-left: 1rem;
+        }
+        
+        .nav button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
