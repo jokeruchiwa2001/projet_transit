@@ -34,7 +34,7 @@ try {
         default:
             throw new Error('Type de cargaison invalide');
     }
-    
+     
     // Retourner les données de la cargaison
     const result = {
         success: true, 
