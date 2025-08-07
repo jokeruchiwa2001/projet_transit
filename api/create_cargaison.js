@@ -27,7 +27,7 @@ try {
             break;
         case 'maritime':
             cargaison = new Maritime(id, distanceNum);
-            break;
+            break; 
         case 'aerienne':
             cargaison = new Aerienne(id, distanceNum);
             break;
@@ -37,7 +37,7 @@ try {
     
     // Retourner les données de la cargaison
     const result = {
-        success: true,
+        success: true, 
         cargaison: {
             id: cargaison.id,
             type: cargaison.getType(),
