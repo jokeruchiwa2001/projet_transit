@@ -13,7 +13,7 @@ if (args.length < 3) {
     }));
     process.exit(1);
 }
-
+ 
 const [id, type, distance] = args;
 
 try {
