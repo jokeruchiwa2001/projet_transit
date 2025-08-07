@@ -1,7 +1,7 @@
 // Configuration de l'API externe
 const API_CONFIG = {
-  // URL de votre serveur JSON déployé sur Render
-  BASE_URL: 'https://json-server-typescript-5.onrender.com',
+  // URL de l'API locale (même serveur)
+  BASE_URL: process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3000',
   
   // Endpoints disponibles
   ENDPOINTS: {
