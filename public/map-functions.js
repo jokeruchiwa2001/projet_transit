@@ -8,14 +8,34 @@ let currentLocationField = null;
 
 // Ouvrir le sélecteur de lieu
 function openLocationSelector(field) {
+    console.log('Ouverture de la carte pour le champ:', field);
     currentLocationField = field;
+    
     const modal = document.getElementById('map-modal');
+    if (!modal) {
+        console.error('Modal de carte non trouvé');
+        return;
+    }
+    
+    // Afficher le modal immédiatement
     modal.style.display = 'block';
     
-    // Attendre un peu que le modal soit affiché
+    // Mettre à jour le titre selon le champ
+    const title = document.getElementById('map-modal-title');
+    if (title) {
+        if (field.includes('depart')) {
+            title.textContent = 'Sélectionner le lieu de départ';
+        } else if (field.includes('arrivee')) {
+            title.textContent = 'Sélectionner le lieu d\'arrivée';
+        } else {
+            title.textContent = 'Sélectionner un lieu sur la carte';
+        }
+    }
+    
+    // Attendre que le modal soit visible puis initialiser la carte
     setTimeout(() => {
         initializeMap();
-    }, 300);
+    }, 200);
 }
 
 // Initialiser la carte Leaflet
@@ -177,7 +197,22 @@ function confirmLocationSelection() {
         locationInput.value = selectedLocation.lieu;
         locationInput.dataset.latitude = selectedLocation.latitude;
         locationInput.dataset.longitude = selectedLocation.longitude;
+        
+        // Mettre à jour aussi les champs cachés pour la compatibilité
+        if (currentLocationField.includes('depart')) {
+            const latInput = document.getElementById('lieu-depart-lat');
+            const lngInput = document.getElementById('lieu-depart-lng');
+            if (latInput) latInput.value = selectedLocation.latitude;
+            if (lngInput) lngInput.value = selectedLocation.longitude;
+        } else if (currentLocationField.includes('arrivee')) {
+            const latInput = document.getElementById('lieu-arrivee-lat');
+            const lngInput = document.getElementById('lieu-arrivee-lng');
+            if (latInput) latInput.value = selectedLocation.latitude;
+            if (lngInput) lngInput.value = selectedLocation.longitude;
+        }
     }
+    
+    console.log('Lieu sélectionné:', selectedLocation);
     
     // Fermer le modal
     closeMapModal();

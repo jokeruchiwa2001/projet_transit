@@ -74,137 +74,7 @@ async function apiCall(endpoint, options = {}) {
     }
 }
 
-// Fonction pour ouvrir le sélecteur de lieu avec Leaflet
-function openLocationSelector(type) {
-    currentLocationTarget = type;
-    const modal = $('modal');
-    const modalBody = $('modal-body');
-    
-    if (!modalBody) {
-        console.error('Modal body not found');
-        return;
-    }
-    
-    modalBody.innerHTML = `
-        <h3>Sélectionner le lieu de ${type}</h3>
-        <div id="map" style="height: 400px; width: 100%; margin-bottom: 20px;"></div>
-        <div style="margin-bottom: 10px;">
-            <input type="text" id="search-location" placeholder="Rechercher une ville..." 
-                   style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-        </div>
-        <div style="display: flex; gap: 10px; justify-content: flex-end;">
-            <button onclick="confirmLocationSelection()" style="background: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">
-                Confirmer la sélection
-            </button>
-            <button onclick="closeModal()" style="background: #6c757d; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">
-                Annuler
-            </button>
-        </div>
-    `;
-    
-    modal.style.display = 'block';
-    
-    // Attendre que le modal soit affiché avant d'initialiser la carte
-    setTimeout(() => {
-        // Nettoyer le conteneur de carte s'il existe déjà
-        const mapContainer = $('map');
-        if (mapContainer) {
-            mapContainer.innerHTML = '';
-            mapContainer._leaflet_id = null; // Reset Leaflet ID
-        }
-        
-        // Si une carte existe déjà, la supprimer
-        if (map) {
-            map.remove();
-            map = null;
-        }
-        
-        // Initialiser la carte Leaflet (3 lignes comme demandé !)
-        // Vérification de sécurité pour éviter le conflit
-        if (document.getElementById('map') && document.getElementById('map').offsetWidth > 0) {
-            map = L.map('map').setView([14.6937, -17.4441], 10); // Vue centrée sur Dakar
-        } else {
-            console.error('Conteneur de carte non prêt');
-            return;
-        }
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-        marker = L.marker([48.8566, 2.3522]).addTo(map).bindPopup('Cliquez sur la carte pour sélectionner un lieu');
-        
-        // Écouter les clics sur la carte
-        map.on('click', function(e) {
-            const lat = e.latlng.lat;
-            const lng = e.latlng.lng;
-            
-            // Mettre à jour le marqueur
-            marker.setLatLng([lat, lng]);
-            
-            // Sauvegarder la position sélectionnée
-            selectedLocation = {
-                lat: lat,
-                lng: lng,
-                lieu: `Position (${lat.toFixed(4)}, ${lng.toFixed(4)})`
-            };
-            
-            // Geocoding inverse pour obtenir le nom du lieu
-            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.display_name) {
-                        selectedLocation.lieu = data.display_name;
-                        marker.bindPopup(data.display_name).openPopup();
-                    }
-                })
-                .catch(error => {
-                    console.warn('Erreur geocoding:', error);
-                    marker.bindPopup(selectedLocation.lieu).openPopup();
-                });
-        });
-        
-        // Recherche de lieu
-        const searchInput = $('search-location');
-        searchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                searchLocation(this.value);
-            }
-        });
-        
-    }, 100);
-}
-
-// Fonction de recherche de lieu
-function searchLocation(query) {
-    if (!query) return;
-    
-    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data && data.length > 0) {
-                const result = data[0];
-                const lat = parseFloat(result.lat);
-                const lng = parseFloat(result.lon);
-                
-                // Centrer la carte sur le résultat
-                map.setView([lat, lng], 13);
-                marker.setLatLng([lat, lng]);
-                
-                selectedLocation = {
-                    lat: lat,
-                    lng: lng,
-                    lieu: result.display_name
-                };
-                
-                marker.bindPopup(result.display_name).openPopup();
-            } else {
-                alert('Aucun résultat trouvé pour cette recherche.');
-            }
-        })
-        .catch(error => {
-            console.error('Erreur de recherche:', error);
-            alert('Erreur lors de la recherche.');
-        });
-}
+// Les fonctions de carte sont maintenant dans map-functions.js
 
 function simulateLocationSelection(address) {
     if (!address.trim()) {
@@ -229,27 +99,7 @@ function simulateLocationSelection(address) {
 
 
 
-// Fonction pour confirmer la sélection de lieu (appelée depuis le modal Leaflet)
-function confirmLocationSelection() {
-    if (!selectedLocation || !currentLocationTarget) {
-        showNotification('Veuillez sélectionner un lieu sur la carte', 'warning');
-        return;
-    }
-    
-    // Remplir les champs appropriés
-    if (currentLocationTarget === 'depart') {
-        $('lieu-depart-display').value = selectedLocation.lieu;
-        if ($('lieu-depart-lat')) $('lieu-depart-lat').value = selectedLocation.lat;
-        if ($('lieu-depart-lng')) $('lieu-depart-lng').value = selectedLocation.lng;
-    } else {
-        $('lieu-arrivee-display').value = selectedLocation.lieu;
-        if ($('lieu-arrivee-lat')) $('lieu-arrivee-lat').value = selectedLocation.lat;
-        if ($('lieu-arrivee-lng')) $('lieu-arrivee-lng').value = selectedLocation.lng;
-    }
-    
-    closeModal();
-    showNotification(`Lieu de ${currentLocationTarget} sélectionné : ${selectedLocation.lieu}`, 'success');
-}
+// Cette fonction est maintenant dans map-functions.js
 
 function confirmLocation() {
     if (!selectedLocation || !currentLocationTarget) {
@@ -569,10 +419,26 @@ async function markCargaisonArrived(id) {
 async function loadStatistiques() {
     try {
         showLoading('stats-grid');
-        const stats = await apiCall('/statistiques');
-        displayStatistiques(stats);
-        createCharts(stats);
+        const response = await apiCall('/statistiques');
+        
+        // Vérifier si la réponse contient une erreur
+        if (response && response.error) {
+            console.error('Erreur API statistiques:', response.error);
+            displayError('stats-grid', 'Erreur lors du chargement des statistiques: ' + response.error);
+            return;
+        }
+        
+        // Vérifier si on a des données valides
+        if (!response || typeof response !== 'object') {
+            console.error('Données statistiques invalides:', response);
+            displayError('stats-grid', 'Données statistiques invalides');
+            return;
+        }
+        
+        displayStatistiques(response);
+        createCharts(response);
     } catch (error) {
+        console.error('Erreur loadStatistiques:', error);
         displayError('stats-grid', 'Erreur lors du chargement des statistiques');
     }
 }

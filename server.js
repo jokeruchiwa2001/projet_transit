@@ -697,10 +697,26 @@ app.get('/api/colis/track', (req, res) => {
 });
 
 // Statistiques
-app.get('/api/statistiques', (req, res) => {
+app.get('/api/statistiques', authenticateToken, async (req, res) => {
   try {
-    const cargaisons = loadJSON('cargaisons.json');
-    const colisList = loadJSON('colis.json');
+    // En production, utiliser l'API service, en dev utiliser les fichiers locaux
+    let cargaisons, colisList;
+    
+    if (process.env.NODE_ENV === 'production') {
+      // Lecture directe des fichiers en production
+      cargaisons = loadJSON('cargaisons.json');
+      colisList = loadJSON('colis.json');
+    } else {
+      // Utiliser l'API service en développement
+      try {
+        cargaisons = await ApiService.getCargaisons();
+        colisList = await ApiService.getColis();
+      } catch (apiError) {
+        console.log('API Service non disponible, utilisation des fichiers locaux');
+        cargaisons = loadJSON('cargaisons.json');
+        colisList = loadJSON('colis.json');
+      }
+    }
 
     const stats = {
       totalCargaisons: cargaisons.length,
