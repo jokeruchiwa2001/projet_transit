@@ -26,15 +26,30 @@ function initializeMap() {
         leafletMap = null;
     }
     
-    // Vérifier que le conteneur existe
+    // Vérifier que le conteneur existe et attendre qu'il soit visible
     const mapContainer = document.getElementById('leaflet-map');
     if (!mapContainer) {
         console.error('Conteneur de carte non trouvé');
         return;
     }
     
+    // Vérifier que le modal est visible
+    const modal = document.getElementById('map-modal');
+    if (!modal || modal.style.display === 'none') {
+        console.error('Modal de carte non visible');
+        return;
+    }
+    
     // Nettoyer le conteneur
     mapContainer.innerHTML = '';
+    
+    // Attendre que le conteneur soit complètement rendu
+    setTimeout(() => {
+        if (mapContainer.offsetWidth === 0 || mapContainer.offsetHeight === 0) {
+            console.error('Conteneur de carte pas encore visible, nouvelle tentative...');
+            setTimeout(() => initializeMap(), 100);
+            return;
+        }
     
     // Initialiser la carte sur Dakar, Sénégal
     leafletMap = L.map('leaflet-map').setView([14.6937, -17.4441], 10);
@@ -63,10 +78,12 @@ function initializeMap() {
         updateMarkerPosition(position.lat, position.lng);
     });
     
-    // Redimensionner la carte après un délai
-    setTimeout(() => {
-        leafletMap.invalidateSize();
-    }, 100);
+        // Redimensionner la carte après un délai
+        setTimeout(() => {
+            leafletMap.invalidateSize();
+        }, 100);
+        
+    }, 50); // Fermer le setTimeout du conteneur
 }
 
 // Mettre à jour la position du marqueur

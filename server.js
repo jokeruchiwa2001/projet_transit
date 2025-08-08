@@ -19,6 +19,20 @@ const PORT = process.env.PORT || 3005;
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// CSP pour autoriser les scripts inline et les ressources externes
+app.use((req, res, next) => {
+  res.setHeader('Content-Security-Policy', 
+    "default-src 'self'; " +
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; " +
+    "style-src 'self' 'unsafe-inline' https://unpkg.com https://fonts.googleapis.com https://cdnjs.cloudflare.com; " +
+    "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; " +
+    "img-src 'self' data: https://*.tile.openstreetmap.org https://*.openstreetmap.org; " +
+    "connect-src 'self' https://nominatim.openstreetmap.org;"
+  );
+  next();
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Créer le dossier data s'il n'existe pas

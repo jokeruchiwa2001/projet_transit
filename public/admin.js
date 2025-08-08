@@ -49,14 +49,28 @@ async function apiCall(endpoint, options = {}) {
         }
         
         if (!response.ok) {
+            // Gestion spéciale pour les erreurs serveur
+            if (response.status >= 500) {
+                console.error(`Erreur serveur ${response.status}`);
+                showNotification('Erreur serveur temporaire', 'error');
+                return { error: `Erreur serveur (${response.status})` };
+            }
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         
         return await response.json();
     } catch (error) {
         console.error('API Error:', error);
+        
+        // Gestion des erreurs réseau
+        if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+            console.error('Erreur de connexion réseau');
+            showNotification('Problème de connexion réseau', 'error');
+            return { error: 'Problème de connexion réseau' };
+        }
+        
         showNotification('Erreur de communication avec le serveur', 'error');
-        throw error;
+        return { error: error.message };
     }
 }
 
@@ -106,7 +120,13 @@ function openLocationSelector(type) {
         }
         
         // Initialiser la carte Leaflet (3 lignes comme demandé !)
-        map = L.map('map').setView([48.8566, 2.3522], 6); // Vue centrée sur la France
+        // Vérification de sécurité pour éviter le conflit
+        if (document.getElementById('map') && document.getElementById('map').offsetWidth > 0) {
+            map = L.map('map').setView([14.6937, -17.4441], 10); // Vue centrée sur Dakar
+        } else {
+            console.error('Conteneur de carte non prêt');
+            return;
+        }
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
