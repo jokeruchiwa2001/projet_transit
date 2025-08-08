@@ -855,14 +855,75 @@ function getStatusBadgeClass(status) {
 }
 
 function closeModal() {
-    // Nettoyer la carte Leaflet si elle existe
-    if (map) {
-        map.remove();
-        map = null;
-        marker = null;
+    // Fermer le modal principal
+    const modal = $('modal');
+    if (modal) {
+        modal.style.display = 'none';
     }
     
-    $('modal').style.display = 'none';
+    // Nettoyer le contenu du modal
+    const modalBody = $('modal-body');
+    if (modalBody) {
+        modalBody.innerHTML = '';
+    }
+}
+
+// Fonction de sécurité pour closeMapModal au cas où map-functions.js ne serait pas chargé
+function safeCloseMapModal() {
+    if (typeof closeMapModal === 'function') {
+        closeMapModal();
+    } else {
+        console.warn('closeMapModal function not found');
+        const mapModal = $('map-modal');
+        if (mapModal) {
+            mapModal.style.display = 'none';
+        }
+    }
+}
+
+// Configuration des gestionnaires de fermeture pour tous les modals
+function setupModalCloseHandlers() {
+    // Utiliser la délégation d'événement pour les boutons de fermeture
+    document.addEventListener('click', (e) => {
+        // Bouton × du modal principal
+        if (e.target.matches('#modal .close')) {
+            e.preventDefault();
+            closeModal();
+        }
+        
+        // Bouton × du modal de carte
+        if (e.target.matches('#map-modal .close')) {
+            e.preventDefault();
+            safeCloseMapModal();
+        }
+        
+        // Boutons avec onclick="closeModal()"
+        if (e.target.matches('button[onclick*="closeModal"]')) {
+            e.preventDefault();
+            closeModal();
+        }
+        
+        // Boutons avec onclick="closeMapModal()"
+        if (e.target.matches('button[onclick*="closeMapModal"]')) {
+            e.preventDefault();
+            safeCloseMapModal();
+        }
+    });
+    
+    // Fermeture avec la touche Échap
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const modal = $('modal');
+            const mapModal = $('map-modal');
+            
+            if (modal && modal.style.display === 'block') {
+                closeModal();
+            }
+            if (mapModal && mapModal.style.display === 'block') {
+                safeCloseMapModal();
+            }
+        }
+    });
 }
 
 // Gestion des formulaires
@@ -977,15 +1038,19 @@ document.addEventListener('DOMContentLoaded', () => {
     initNavigation();
     initForms();
     
-    // Gestion de la fermeture du modal
-    const closeBtn = $('.close');
-    if (closeBtn) {
-        closeBtn.addEventListener('click', closeModal);
-    }
+    // Gestion de la fermeture de tous les modals
+    setupModalCloseHandlers();
+    
+    // Fermeture en cliquant à l'extérieur
     window.addEventListener('click', (e) => {
         const modal = $('modal');
+        const mapModal = $('map-modal');
+        
         if (e.target === modal) {
             closeModal();
+        }
+        if (e.target === mapModal) {
+            safeCloseMapModal();
         }
     });
     
