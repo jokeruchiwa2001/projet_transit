@@ -1,1 +1,167 @@
-[]
+[
+  {
+    "id": "CG-ME02K07LT53Q9",
+    "numero": "CG-ME02K07L",
+    "poidsMax": 990,
+    "trajet": {
+      "depart": {
+        "lieu": "Dakar, Sénégal",
+        "latitude": 14.6937,
+        "longitude": -17.4441
+      },
+      "arrivee": {
+        "lieu": "Thiès,Sénégal",
+        "latitude": 15.399600549579155,
+        "longitude": -16.869721989311298
+      }
+    },
+    "distance": 100,
+    "type": "maritime",
+    "etatAvancement": "ARRIVE",
+    "etatGlobal": "FERME",
+    "dateCreation": "2025-08-06T14:34:15.441Z",
+    "produits": [],
+    "colisIds": [],
+    "prixTotal": 0,
+    "dateDepart": "2025-08-06T16:19:45.061Z",
+    "dateArriveeReelle": "2025-08-06T16:55:00.941Z"
+  },
+  {
+    "id": "CG-ME02KXW26FYBL",
+    "numero": "CG-ME02KXW2",
+    "poidsMax": 200,
+    "trajet": {
+      "depart": {
+        "lieu": "Put,Sénégal",
+        "latitude": 14.804437927794307,
+        "longitude": -17.531350421047364
+      },
+      "arrivee": {
+        "lieu": "Apix,Sénégal",
+        "latitude": 13.77910652700583,
+        "longitude": -16.649678659116248
+      }
+    },
+    "distance": 148,
+    "type": "routiere",
+    "etatAvancement": "ARRIVE",
+    "etatGlobal": "FERME",
+    "dateCreation": "2025-08-06T14:34:59.090Z",
+    "produits": [],
+    "colisIds": [],
+    "prixTotal": 0,
+    "dateDepart": "2025-08-06T17:04:06.958Z",
+    "dateArriveeReelle": "2025-08-06T17:04:11.976Z"
+  },
+  {
+    "id": "CG-ME08RPNEHK0U0",
+    "numero": "CG-ME08RPNE",
+    "poidsMax": 1000,
+    "trajet": {
+      "depart": {
+        "lieu": "apix",
+        "latitude": 14.664734816037367,
+        "longitude": -17.424760535803138
+      },
+      "arrivee": {
+        "lieu": "nioro",
+        "latitude": 14.677785365775026,
+        "longitude": -17.412302919608347
+      }
+    },
+    "distance": 2,
+    "type": "maritime",
+    "etatAvancement": "ARRIVE",
+    "etatGlobal": "FERME",
+    "dateCreation": "2025-08-06T17:28:12.698Z",
+    "produits": [],
+    "colisIds": [],
+    "prixTotal": 0,
+    "dateDepart": "2025-08-06T17:28:32.667Z",
+    "dateArriveeReelle": "2025-08-06T19:04:46.101Z"
+  },
+  {
+    "id": "CG-ME0C8H08QZ10B",
+    "numero": "CG-ME0C8H08",
+    "poidsMax": 9000,
+    "trajet": {
+      "depart": {
+        "lieu": "Lieu sélectionné",
+        "latitude": 14.675806902419403,
+        "longitude": -17.416689019899426
+      },
+      "arrivee": {
+        "lieu": "foire",
+        "latitude": 14.67614487881723,
+        "longitude": -17.395725545038687
+      }
+    },
+    "distance": 2,
+    "type": "aerienne",
+    "etatAvancement": "ARRIVE",
+    "etatGlobal": "FERME",
+    "dateCreation": "2025-08-06T19:05:13.496Z",
+    "produits": [],
+    "colisIds": [],
+    "prixTotal": 0,
+    "dateDepart": "2025-08-07T07:35:32.578Z",
+    "dateArriveeReelle": "2025-08-07T07:35:39.938Z"
+  },
+  {
+    "id": "CG-ME132A5HG9NWM",
+    "numero": "CG-ME132A5H",
+    "poidsMax": 1000,
+    "trajet": {
+      "depart": {
+        "lieu": "dieupeul",
+        "latitude": 14.685724831667201,
+        "longitude": -17.45812199022503
+      },
+      "arrivee": {
+        "lieu": "jet d'eau",
+        "latitude": 14.722061521204171,
+        "longitude": -17.45201162416442
+      }
+    },
+    "distance": 4,
+    "type": "maritime",
+    "etatAvancement": "ARRIVE",
+    "etatGlobal": "FERME",
+    "dateCreation": "2025-08-07T07:36:14.309Z",
+    "produits": [],
+    "colisIds": [],
+    "prixTotal": 0,
+    "dateDepart": "2025-08-07T07:36:21.112Z",
+    "dateArriveeReelle": "2025-08-07T07:36:27.048Z"
+  },
+  {
+    "id": "CG-ME13LRGEZZFFZ",
+    "numero": "CG-ME13LRGE",
+    "poidsMax": 1000,
+    "trajet": {
+      "depart": {
+        "lieu": "Lieu sélectionné",
+        "latitude": 14.739998368596895,
+        "longitude": -17.463054826457732
+      },
+      "arrivee": {
+        "lieu": "Lieu sélectionné",
+        "latitude": 14.665280937079087,
+        "longitude": -17.47284051011088
+      }
+    },
+    "distance": 8,
+    "type": "routiere",
+    "etatAvancement": "ARRIVE",
+    "etatGlobal": "FERME",
+    "dateCreation": "2025-08-07T07:51:23.198Z",
+    "produits": [],
+    "colisIds": [
+      "COL-ME145E96PCVJ0",
+      "COL-ME14891410CAW"
+    ],
+    "prixTotal": 1400000,
+    "dateDepart": "2025-08-07T08:19:45.225Z",
+    "dateArriveeReelle": "2025-08-07T08:20:23.870Z"
+  }
+]

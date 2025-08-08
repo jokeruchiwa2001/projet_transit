@@ -8,8 +8,3 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        fromService:
-          type: web
-          name: transcargo
-          property: port

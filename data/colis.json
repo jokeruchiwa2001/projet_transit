@@ -1,1 +1,54 @@
-[]
+[
+  {
+    "id": "COL-ME145E96PCVJ0",
+    "expediteur": {
+      "prenom": "eiferjfioj",
+      "nom": "ergeger",
+      "telephone": "778909890",
+      "email": "ergre@com",
+      "adresse": "eeoijijoefijr"
+    },
+    "destinataire": {
+      "nomComplet": "erfuerfiu",
+      "telephone": "778900987",
+      "adresse": "iheiufhie"
+    },
+    "poids": 100,
+    "typeProduit": "alimentaire",
+    "typeCargaison": "routiere",
+    "nombreColis": 10,
+    "prixCalcule": 80000,
+    "prixFinal": 800000,
+    "etat": "PERDU",
+    "cargaisonId": "CG-ME13LRGEZZFFZ",
+    "dateCreation": "2025-08-07T08:06:39.210Z",
+    "codeDestinataire": "CZDQXDSC",
+    "dateArrivee": "2025-08-07T08:20:23.870Z"
+  },
+  {
+    "id": "COL-ME14891410CAW",
+    "expediteur": {
+      "prenom": "erifoje",
+      "nom": "erfojei",
+      "telephone": "778990908",
+      "email": "eoufhu@com",
+      "adresse": "jiefiefuih\n"
+    },
+    "destinataire": {
+      "nomComplet": "iuhiurhfi",
+      "telephone": "778900987",
+      "adresse": "iuuehriufhieu"
+    },
+    "poids": 200,
+    "typeProduit": "fragile",
+    "typeCargaison": "routiere",
+    "nombreColis": 10,
+    "prixCalcule": 60000,
+    "prixFinal": 600000,
+    "etat": "ARRIVE",
+    "cargaisonId": "CG-ME13LRGEZZFFZ",
+    "dateCreation": "2025-08-07T08:08:52.408Z",
+    "codeDestinataire": "GF7YN43U",
+    "dateArrivee": "2025-08-07T08:20:23.870Z"
+  }
+]
