@@ -1,9 +1,5 @@
 // Configuration
 const API_BASE_URL = '/api';
-let map;
-let marker;
-let selectedLocation = null;
-let currentLocationTarget = null; // 'depart' ou 'arrivee'
 
 // État de l'application
 let currentSection = 'cargaisons';
@@ -1079,8 +1075,7 @@ function initForms() {
     });
     
     // Boutons de sélection de lieu
-    $('btn-select-depart')?.addEventListener('click', () => openLocationSelector('depart'));
-    $('btn-select-arrivee')?.addEventListener('click', () => openLocationSelector('arrivee'));
+    // Les event listeners sont maintenant gérés directement dans le HTML
     
     // Event listeners pour la sélection de cargaison
     $('colis-type-produit')?.addEventListener('change', updateCargaisonOptions);
