@@ -1,10 +1,24 @@
 // Service pour gérer les appels à l'API JSON externe
 const API_CONFIG = require('./config');
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+const fs = require('fs');
+const path = require('path');
 
 class ApiService {
   
-  // Méthode générique pour faire des requêtes
+  // Lecture directe des fichiers JSON en production
+  static readJSONFile(filename) {
+    try {
+      const filePath = path.join(__dirname, 'data', filename);
+      const data = fs.readFileSync(filePath, 'utf8');
+      return JSON.parse(data);
+    } catch (error) {
+      console.error(`Erreur lecture ${filename}:`, error);
+      return [];
+    }
+  }
+  
+  // Méthode générique pour faire des requêtes (dev uniquement)
   static async makeRequest(url, options = {}) {
     try {
       const response = await fetch(url, {
@@ -28,6 +42,11 @@ class ApiService {
 
   // CARGAISONS
   static async getCargaisons() {
+    // En production, lire directement le fichier JSON
+    if (process.env.NODE_ENV === 'production') {
+      return this.readJSONFile('cargaisons.json');
+    }
+    // En dev, utiliser l'API externe
     const url = API_CONFIG.getUrl(API_CONFIG.ENDPOINTS.CARGAISONS);
     return await this.makeRequest(url);
   }
@@ -62,6 +81,11 @@ class ApiService {
 
   // COLIS
   static async getColis() {
+    // En production, lire directement le fichier JSON
+    if (process.env.NODE_ENV === 'production') {
+      return this.readJSONFile('colis.json');
+    }
+    // En dev, utiliser l'API externe
     const url = API_CONFIG.getUrl(API_CONFIG.ENDPOINTS.COLIS);
     return await this.makeRequest(url);
   }
