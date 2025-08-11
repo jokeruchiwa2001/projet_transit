@@ -254,7 +254,7 @@ app.get('/api/cargaisons/disponibles', authenticateToken, async (req, res) => {
   }
 });
 
-app.post('/api/cargaisons', authenticateToken, async (req, res) => {
+app.post('/api/cargaisons', async (req, res) => {
   try {
     const { type, lieuDepart, lieuArrivee, poidsMax = 1000, coordonneesDepart, coordonneesArrivee } = req.body;
     
@@ -321,7 +321,7 @@ app.get('/api/cargaisons/:id/colis', authenticateToken, async (req, res) => {
 });
 
 // Routes pour gérer les actions sur les cargaisons (protégées)
-app.post('/api/cargaisons/:id/start', authenticateToken, async (req, res) => {
+app.post('/api/cargaisons/:id/start', async (req, res) => {
   try {
     const { id } = req.params;
     const cargaison = await ApiService.getCargaisonById(id);
@@ -450,6 +450,22 @@ app.post('/api/colis', authenticateToken, async (req, res) => {
 
     if (!cargaisonOuverte) {
       return res.status(400).json({ error: `Aucune cargaison ${typeCargaison} ouverte` });
+    }
+
+    // Vérifier si la cargaison peut supporter le poids supplémentaire
+    const colisList = await ApiService.getColis();
+    const colisExistants = colisList.filter(c => c.cargaisonId === cargaisonOuverte.id);
+    const poidsActuel = colisExistants.reduce((total, c) => total + (c.poids * c.nombreColis || 0), 0);
+    const poidsTotal = poids * nombreColis;
+    const nouveauPoidsTotal = poidsActuel + poidsTotal;
+
+    if (nouveauPoidsTotal > cargaisonOuverte.poidsMax) {
+      return res.status(400).json({ 
+        error: `Capacité insuffisante! Poids disponible: ${cargaisonOuverte.poidsMax - poidsActuel}kg, demandé: ${poidsTotal}kg`,
+        poidsActuel: poidsActuel,
+        poidsMax: cargaisonOuverte.poidsMax,
+        poidsDisponible: cargaisonOuverte.poidsMax - poidsActuel
+      });
     }
 
     // Calcul du prix selon le nouveau tableau de tarifs

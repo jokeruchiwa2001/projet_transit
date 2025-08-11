@@ -612,14 +612,28 @@ function updateCargaisonOptions() {
 // Gestion des colis et recherche
 async function createColis(formData) {
     try {
-        const data = await apiCall('/colis', {
+        const response = await apiCall('/colis', {
             method: 'POST',
             body: JSON.stringify(formData)
         });
         
+        // Vérifier si la réponse contient une erreur
+        if (response && response.error) {
+            showNotification(response.error, 'error');
+            
+            // Si c'est une erreur de capacité, afficher les détails
+            if (response.poidsDisponible !== undefined) {
+                const details = `Poids actuel: ${response.poidsActuel}kg / ${response.poidsMax}kg\nPoids disponible: ${response.poidsDisponible}kg`;
+                setTimeout(() => {
+                    showNotification(details, 'warning');
+                }, 2000);
+            }
+            return null;
+        }
+        
         showNotification('Colis enregistré avec succès', 'success');
-        showReceiptModal(data.recu);
-        return data;
+        showReceiptModal(response.recu);
+        return response;
     } catch (error) {
         showNotification('Erreur lors de l\'enregistrement du colis', 'error');
         throw error;

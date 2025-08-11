@@ -42,34 +42,46 @@ class ApiService {
 
   // CARGAISONS
   static async getCargaisons() {
-    // En production, lire directement le fichier JSON
-    if (process.env.NODE_ENV === 'production') {
-      return this.readJSONFile('cargaisons.json');
-    }
-    // En dev, utiliser l'API externe
-    const url = API_CONFIG.getUrl(API_CONFIG.ENDPOINTS.CARGAISONS);
-    return await this.makeRequest(url);
+    // Utiliser toujours les fichiers locaux
+    return this.readJSONFile('cargaisons.json');
   }
 
   static async getCargaisonById(id) {
-    const url = API_CONFIG.getUrl(API_CONFIG.ENDPOINTS.CARGAISONS + `/${id}`);
-    return await this.makeRequest(url);
+    // Toujours lire directement dans le fichier JSON
+    const cargaisons = this.readJSONFile('cargaisons.json');
+    return cargaisons.find(c => c.id === id);
   }
 
   static async createCargaison(cargaison) {
-    const url = API_CONFIG.getUrl(API_CONFIG.ENDPOINTS.CARGAISONS);
-    return await this.makeRequest(url, {
-      method: 'POST',
-      body: JSON.stringify(cargaison)
-    });
+    // Toujours écrire directement dans le fichier JSON
+    try {
+      const filePath = path.join(__dirname, 'data', 'cargaisons.json');
+      const existingData = this.readJSONFile('cargaisons.json');
+      existingData.push(cargaison);
+      fs.writeFileSync(filePath, JSON.stringify(existingData, null, 2));
+      return cargaison;
+    } catch (error) {
+      console.error('Erreur écriture cargaison:', error);
+      throw error;
+    }
   }
 
   static async updateCargaison(id, cargaison) {
-    const url = API_CONFIG.getUrl(API_CONFIG.ENDPOINTS.CARGAISONS + `/${id}`);
-    return await this.makeRequest(url, {
-      method: 'PUT',
-      body: JSON.stringify(cargaison)
-    });
+    // Toujours écrire directement dans le fichier JSON
+    try {
+      const filePath = path.join(__dirname, 'data', 'cargaisons.json');
+      const existingData = this.readJSONFile('cargaisons.json');
+      const index = existingData.findIndex(c => c.id === id);
+      if (index !== -1) {
+        existingData[index] = cargaison;
+        fs.writeFileSync(filePath, JSON.stringify(existingData, null, 2));
+        return cargaison;
+      }
+      throw new Error('Cargaison non trouvée');
+    } catch (error) {
+      console.error('Erreur mise à jour cargaison:', error);
+      throw error;
+    }
   }
 
   static async deleteCargaison(id) {
@@ -81,34 +93,46 @@ class ApiService {
 
   // COLIS
   static async getColis() {
-    // En production, lire directement le fichier JSON
-    if (process.env.NODE_ENV === 'production') {
-      return this.readJSONFile('colis.json');
-    }
-    // En dev, utiliser l'API externe
-    const url = API_CONFIG.getUrl(API_CONFIG.ENDPOINTS.COLIS);
-    return await this.makeRequest(url);
+    // Utiliser toujours les fichiers locaux
+    return this.readJSONFile('colis.json');
   }
 
   static async getColisById(id) {
-    const url = API_CONFIG.getUrl(API_CONFIG.ENDPOINTS.COLIS + `/${id}`);
-    return await this.makeRequest(url);
+    // Toujours lire directement dans le fichier JSON
+    const colis = this.readJSONFile('colis.json');
+    return colis.find(c => c.id === id);
   }
 
   static async createColis(colis) {
-    const url = API_CONFIG.getUrl(API_CONFIG.ENDPOINTS.COLIS);
-    return await this.makeRequest(url, {
-      method: 'POST',
-      body: JSON.stringify(colis)
-    });
+    // Toujours écrire directement dans le fichier JSON
+    try {
+      const filePath = path.join(__dirname, 'data', 'colis.json');
+      const existingData = this.readJSONFile('colis.json');
+      existingData.push(colis);
+      fs.writeFileSync(filePath, JSON.stringify(existingData, null, 2));
+      return colis;
+    } catch (error) {
+      console.error('Erreur écriture colis:', error);
+      throw error;
+    }
   }
 
   static async updateColis(id, colis) {
-    const url = API_CONFIG.getUrl(API_CONFIG.ENDPOINTS.COLIS + `/${id}`);
-    return await this.makeRequest(url, {
-      method: 'PUT',
-      body: JSON.stringify(colis)
-    });
+    // Toujours écrire directement dans le fichier JSON
+    try {
+      const filePath = path.join(__dirname, 'data', 'colis.json');
+      const existingData = this.readJSONFile('colis.json');
+      const index = existingData.findIndex(c => c.id === id);
+      if (index !== -1) {
+        existingData[index] = colis;
+        fs.writeFileSync(filePath, JSON.stringify(existingData, null, 2));
+        return colis;
+      }
+      throw new Error('Colis non trouvé');
+    } catch (error) {
+      console.error('Erreur mise à jour colis:', error);
+      throw error;
+    }
   }
 
   static async deleteColis(id) {

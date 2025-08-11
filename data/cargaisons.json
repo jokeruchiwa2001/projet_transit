@@ -163,5 +163,30 @@
     "prixTotal": 1400000,
     "dateDepart": "2025-08-07T08:19:45.225Z",
     "dateArriveeReelle": "2025-08-07T08:20:23.870Z"
+  },
+  {
+    "id": "CG-ME6YYTNT355NC",
+    "numero": "CG-ME6YYTNT",
+    "poidsMax": 4000,
+    "trajet": {
+      "depart": {
+        "lieu": "Commune de Yoff, Arrondissement des Almadies, Dakar, Région de Dakar, 11500, Sénégal",
+        "latitude": 14.747858388840546,
+        "longitude": -17.468261718750004
+      },
+      "arrivee": {
+        "lieu": "Nguik, Communauté rurale de Mont Rolland, Arrondissement de Pambal, Département de Tivaouane, Thiès, Sénégal",
+        "latitude": 14.916454982593464,
+        "longitude": -17.01919555664063
+      }
+    },
+    "distance": 52,
+    "type": "aerienne",
+    "etatAvancement": "EN_ATTENTE",
+    "etatGlobal": "OUVERT",
+    "dateCreation": "2025-08-11T10:28:11.561Z",
+    "produits": [],
+    "colisIds": [],
+    "prixTotal": 0
   }
 ]

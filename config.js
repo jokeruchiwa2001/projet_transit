@@ -1,9 +1,7 @@
 // Configuration de l'API externe
 const API_CONFIG = {
-  // URL du serveur JSON - local vs production
-  BASE_URL: process.env.NODE_ENV === 'production' 
-    ? '' // API interne en production
-    : 'http://localhost:3001', // JSON Server local en dev
+  // URL du serveur JSON - utilise toujours l'API interne
+  BASE_URL: 'http://localhost:3005/api', // API interne pour développement et production
   
   // Endpoints disponibles
   ENDPOINTS: {
