@@ -50,5 +50,30 @@
     "dateCreation": "2025-08-07T08:08:52.408Z",
     "codeDestinataire": "GF7YN43U",
     "dateArrivee": "2025-08-07T08:20:23.870Z"
+  },
+  {
+    "id": "COL-ME6ZWT3A4K4KK",
+    "expediteur": {
+      "prenom": "zjfoizjofjzo",
+      "nom": "roofjoeirjfo",
+      "telephone": "7773983943",
+      "email": "iehrifuh@rfehifer",
+      "adresse": "ooifjzijefijze"
+    },
+    "destinataire": {
+      "nomComplet": "poezofoizjrog",
+      "telephone": "7748749874",
+      "adresse": "vkfjvoidjfov"
+    },
+    "poids": 100,
+    "typeProduit": "materiel",
+    "typeCargaison": "routiere",
+    "nombreColis": 12,
+    "prixCalcule": 2180000,
+    "prixFinal": 26160000,
+    "etat": "EN_ATTENTE",
+    "cargaisonId": "CG-ME6ZT07RRQDSD",
+    "dateCreation": "2025-08-11T10:54:37.126Z",
+    "codeDestinataire": "8DCN9N4C"
   }
 ]

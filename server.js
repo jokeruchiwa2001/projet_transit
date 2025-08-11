@@ -357,7 +357,7 @@ app.post('/api/cargaisons/:id/start', async (req, res) => {
   }
 });
 
-app.post('/api/cargaisons/:id/reopen', authenticateToken, (req, res) => {
+app.post('/api/cargaisons/:id/reopen', (req, res) => {
   try {
     const { id } = req.params;
     const cargaisons = loadJSON('cargaisons.json');
@@ -378,7 +378,7 @@ app.post('/api/cargaisons/:id/reopen', authenticateToken, (req, res) => {
   }
 });
 
-app.post('/api/cargaisons/:id/arrive', authenticateToken, (req, res) => {
+app.post('/api/cargaisons/:id/arrive', (req, res) => {
   try {
     const { id } = req.params;
     const cargaisons = loadJSON('cargaisons.json');
@@ -409,21 +409,13 @@ app.post('/api/cargaisons/:id/arrive', authenticateToken, (req, res) => {
 });
 
 // Route pour fermer une cargaison
-app.post('/api/cargaisons/:id/close', authenticateToken, (req, res) => {
+app.post('/api/cargaisons/:id/close', (req, res) => {
   try {
     const { id } = req.params;
     const cargaisons = loadJSON('cargaisons.json');
     const index = cargaisons.findIndex(c => c.id === id);
     
     if (index >= 0) {
-      // Vérifier qu'il y a au moins un colis dans la cargaison
-      const colis = loadJSON('colis.json');
-      const colisInCargaison = colis.filter(c => c.cargaisonId === id);
-      
-      if (colisInCargaison.length === 0) {
-        return res.status(400).json({ error: 'Impossible de fermer une cargaison vide. Ajoutez au moins un colis avant de fermer.' });
-      }
-      
       cargaisons[index].etatGlobal = 'FERME';
       saveJSON('cargaisons.json', cargaisons);
       res.json({ message: 'Cargaison fermée' });
@@ -436,20 +428,29 @@ app.post('/api/cargaisons/:id/close', authenticateToken, (req, res) => {
 });
 
 // Routes Colis
-app.post('/api/colis', authenticateToken, async (req, res) => {
+app.post('/api/colis', async (req, res) => {
   try {
-    const { expediteur, destinataire, poids, typeProduit, typeCargaison, nombreColis } = req.body;
+    console.log('Données reçues:', req.body);
+    const { expediteur, destinataire, poids, typeProduit, typeCargaison, nombreColis, cargaisonId } = req.body;
     
-    if (!expediteur || !destinataire || !poids || !typeProduit || !typeCargaison || !nombreColis) {
+    if (!expediteur || !destinataire || !poids || !typeProduit || !nombreColis) {
+      console.log('Données manquantes:', { expediteur, destinataire, poids, typeProduit, typeCargaison, nombreColis, cargaisonId });
       return res.status(400).json({ error: 'Données manquantes' });
     }
 
-    // Trouver une cargaison ouverte du bon type
+    // Utiliser la cargaison spécifiée ou trouver une cargaison ouverte du bon type
     const cargaisons = await ApiService.getCargaisons();
-    const cargaisonOuverte = cargaisons.find(c => c.type === typeCargaison && c.etatGlobal === 'OUVERT');
+    let cargaisonOuverte;
+    
+    if (cargaisonId) {
+      cargaisonOuverte = cargaisons.find(c => c.id === cargaisonId && c.etatGlobal === 'OUVERT');
+    } else if (typeCargaison) {
+      cargaisonOuverte = cargaisons.find(c => c.type === typeCargaison && c.etatGlobal === 'OUVERT');
+    }
 
     if (!cargaisonOuverte) {
-      return res.status(400).json({ error: `Aucune cargaison ${typeCargaison} ouverte` });
+      const message = cargaisonId ? 'Cargaison non trouvée ou fermée' : `Aucune cargaison ${typeCargaison} ouverte`;
+      return res.status(400).json({ error: message });
     }
 
     // Vérifier si la cargaison peut supporter le poids supplémentaire

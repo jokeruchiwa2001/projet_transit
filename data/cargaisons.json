@@ -182,11 +182,40 @@
     },
     "distance": 52,
     "type": "aerienne",
-    "etatAvancement": "EN_ATTENTE",
-    "etatGlobal": "OUVERT",
+    "etatAvancement": "ARRIVE",
+    "etatGlobal": "FERME",
     "dateCreation": "2025-08-11T10:28:11.561Z",
     "produits": [],
     "colisIds": [],
-    "prixTotal": 0
+    "prixTotal": 0,
+    "dateDepart": "2025-08-11T10:47:14.266Z",
+    "dateArriveeReelle": "2025-08-11T10:47:16.764Z"
+  },
+  {
+    "id": "CG-ME6ZT07RRQDSD",
+    "numero": "CG-ME6ZT07R",
+    "poidsMax": 4000,
+    "trajet": {
+      "depart": {
+        "lieu": "Position (14.7439, -17.4861)",
+        "latitude": 14.743874206676322,
+        "longitude": -17.48611450195313
+      },
+      "arrivee": {
+        "lieu": "N9, Thiagal, Baba Garage, Communauté rurale de Baba Garage, Arrondissement de Baba Garage, Département de Bambey, Diourbel, Sénégal",
+        "latitude": 14.953608166091572,
+        "longitude": -16.495971679687504
+      }
+    },
+    "distance": 109,
+    "type": "routiere",
+    "etatAvancement": "EN_ATTENTE",
+    "etatGlobal": "OUVERT",
+    "dateCreation": "2025-08-11T10:51:39.735Z",
+    "produits": [],
+    "colisIds": [
+      "COL-ME6ZWT3A4K4KK"
+    ],
+    "prixTotal": 26160000
   }
 ]
