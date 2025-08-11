@@ -49,13 +49,22 @@ async function apiCall(endpoint, options = {}) {
         }
         
         if (!response.ok) {
+            // Récupérer le message d'erreur du serveur
+            let errorData;
+            try {
+                errorData = await response.json();
+            } catch (e) {
+                errorData = { error: `Erreur ${response.status}` };
+            }
+            
             // Gestion spéciale pour les erreurs serveur
             if (response.status >= 500) {
                 console.error(`Erreur serveur ${response.status}`);
                 showNotification('Erreur serveur temporaire', 'error');
                 return { error: `Erreur serveur (${response.status})` };
             }
-            throw new Error(`HTTP error! status: ${response.status}`);
+            
+            throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
         }
         
         return await response.json();
@@ -381,7 +390,7 @@ async function closeCargaison(id) {
         showNotification('Cargaison fermée', 'success');
         loadCargaisons();
     } catch (error) {
-        showNotification('Erreur lors de la fermeture', 'error');
+        showNotification(error.message || 'Erreur lors de la fermeture', 'error');
     }
 }
 
@@ -391,7 +400,7 @@ async function reopenCargaison(id) {
         showNotification('Cargaison rouverte', 'success');
         loadCargaisons();
     } catch (error) {
-        showNotification('Erreur lors de la réouverture', 'error');
+        showNotification(error.message || 'Erreur lors de la réouverture', 'error');
     }
 }
 
@@ -401,7 +410,7 @@ async function startCargaison(id) {
         showNotification('Cargaison démarrée', 'success');
         loadCargaisons();
     } catch (error) {
-        showNotification('Erreur lors du démarrage', 'error');
+        showNotification(error.message || 'Erreur lors du démarrage', 'error');
     }
 }
 

@@ -209,13 +209,64 @@
     },
     "distance": 109,
     "type": "routiere",
-    "etatAvancement": "EN_ATTENTE",
-    "etatGlobal": "OUVERT",
+    "etatAvancement": "EN_COURS",
+    "etatGlobal": "FERME",
     "dateCreation": "2025-08-11T10:51:39.735Z",
     "produits": [],
     "colisIds": [
       "COL-ME6ZWT3A4K4KK"
     ],
-    "prixTotal": 26160000
+    "prixTotal": 26160000,
+    "dateDepart": "2025-08-11T11:18:48.124Z"
+  },
+  {
+    "id": "CG-ME733RMH1F96C",
+    "numero": "CG-ME733RMH",
+    "poidsMax": 10005,
+    "trajet": {
+      "depart": {
+        "lieu": "Commune de Yoff, Arrondissement des Almadies, Dakar, Région de Dakar, 26369, Sénégal",
+        "latitude": 14.751842498076407,
+        "longitude": -17.46139526367188
+      },
+      "arrivee": {
+        "lieu": "B 99, Leuba, Ostritz, Gœrlitz, Saxe, 02899, Allemagne",
+        "latitude": 51.030339504730925,
+        "longitude": 14.941406250000002
+      }
+    },
+    "distance": 4964,
+    "type": "maritime",
+    "etatAvancement": "EN_ATTENTE",
+    "etatGlobal": "FERME",
+    "dateCreation": "2025-08-11T12:24:00.665Z",
+    "produits": [],
+    "colisIds": [],
+    "prixTotal": 0
+  },
+  {
+    "id": "CG-ME73VBA3YOJ20",
+    "numero": "CG-ME73VBA3",
+    "poidsMax": 2000,
+    "trajet": {
+      "depart": {
+        "lieu": "Sénégal",
+        "latitude": 14.818233565580817,
+        "longitude": -17.54928588867188
+      },
+      "arrivee": {
+        "lieu": "Fouloum, Communauté rurale de Mont Rolland, Arrondissement de Pambal, Département de Tivaouane, Thiès, Sénégal",
+        "latitude": 14.864695212023504,
+        "longitude": -16.99447631835938
+      }
+    },
+    "distance": 60,
+    "type": "maritime",
+    "etatAvancement": "EN_ATTENTE",
+    "etatGlobal": "FERME",
+    "dateCreation": "2025-08-11T12:45:25.851Z",
+    "produits": [],
+    "colisIds": [],
+    "prixTotal": 0
   }
 ]

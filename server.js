@@ -330,12 +330,29 @@ app.post('/api/cargaisons/:id/start', async (req, res) => {
       return res.status(404).json({ error: 'Cargaison non trouvée' });
     }
     
-    // Vérifier qu'il y a au moins un colis dans la cargaison
+    // Vérifier qu'il y a au moins un colis dans la cargaison (d'abord)
     const colisInCargaison = await ApiService.getColisByCargaison(id);
     
     if (colisInCargaison.length === 0) {
       return res.status(400).json({ error: 'Impossible de démarrer une cargaison vide. Ajoutez au moins un colis avant le départ.' });
     }
+    
+    // Vérifier que la cargaison est fermée (elle doit être fermée pour être démarrée)
+    if (cargaison.etatGlobal === 'OUVERT') {
+      return res.status(400).json({ error: 'Impossible de démarrer une cargaison ouverte. Fermez-la d\'abord.' });
+    }
+    
+    // Vérifier que la cargaison n'est pas déjà démarrée
+    if (cargaison.etatAvancement === 'EN_COURS') {
+      return res.status(400).json({ error: 'Cette cargaison est déjà en cours.' });
+    }
+    
+    // Vérifier que la cargaison n'est pas arrivée
+    if (cargaison.etatAvancement === 'ARRIVE') {
+      return res.status(400).json({ error: 'Cette cargaison est déjà arrivée.' });
+    }
+    
+
     
     // Mettre à jour la cargaison
     cargaison.etatAvancement = 'EN_COURS';
@@ -416,9 +433,21 @@ app.post('/api/cargaisons/:id/close', (req, res) => {
     const index = cargaisons.findIndex(c => c.id === id);
     
     if (index >= 0) {
+      const cargaison = cargaisons[index];
+      
+      // Vérifier que la cargaison n'est pas déjà fermée
+      if (cargaison.etatGlobal === 'FERME') {
+        return res.status(400).json({ error: 'Cette cargaison est déjà fermée.' });
+      }
+      
+      // Vérifier que la cargaison n'est pas en cours
+      if (cargaison.etatAvancement === 'EN_COURS') {
+        return res.status(400).json({ error: 'Impossible de fermer une cargaison en cours. Marquez-la comme arrivée d\'abord.' });
+      }
+      
       cargaisons[index].etatGlobal = 'FERME';
       saveJSON('cargaisons.json', cargaisons);
-      res.json({ message: 'Cargaison fermée' });
+      res.json({ message: 'Cargaison fermée avec succès' });
     } else {
       res.status(404).json({ error: 'Cargaison non trouvée' });
     }
