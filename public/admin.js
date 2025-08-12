@@ -5,6 +5,15 @@ const API_BASE_URL = '/api';
 let currentSection = 'cargaisons';
 let currentSearchTab = 'colis-search';
 
+// État de la pagination
+let paginationState = {
+    currentPage: 1,
+    itemsPerPage: 10,
+    totalItems: 0,
+    totalPages: 0,
+    allCargaisons: []
+};
+
 // Utilitaires
 const $ = (id) => document.getElementById(id);
 const $$ = (selector) => document.querySelectorAll(selector);
@@ -201,7 +210,14 @@ async function loadCargaisons() {
         showLoading('liste-cargaisons');
         const cargaisons = await apiCall('/cargaisons');
         console.log(`📦 ${cargaisons.length} cargaisons reçues`);
-        displayCargaisons(cargaisons);
+        
+        // Stocker toutes les cargaisons et mettre à jour l'état de pagination
+        paginationState.allCargaisons = cargaisons;
+        paginationState.totalItems = cargaisons.length;
+        paginationState.totalPages = Math.ceil(cargaisons.length / paginationState.itemsPerPage);
+        
+        // Afficher la page courante
+        displayCargaisonsWithPagination();
         console.log('✅ Affichage des cargaisons terminé');
     } catch (error) {
         console.error('❌ Erreur chargement cargaisons:', error);
@@ -285,6 +301,118 @@ function displayCargaisons(cargaisons) {
             </div>
         </div>
     `).join('');
+}
+
+// Nouvelle fonction pour afficher les cargaisons avec pagination
+function displayCargaisonsWithPagination() {
+    const { currentPage, itemsPerPage, allCargaisons, totalItems } = paginationState;
+    
+    if (totalItems === 0) {
+        displayCargaisons([]);
+        updatePaginationControls();
+        return;
+    }
+    
+    // Calculer les indices de début et fin pour la page courante
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+    
+    // Extraire les cargaisons pour la page courante
+    const currentPageCargaisons = allCargaisons.slice(startIndex, endIndex);
+    
+    // Afficher les cargaisons
+    displayCargaisons(currentPageCargaisons);
+    
+    // Mettre à jour les contrôles de pagination
+    updatePaginationControls();
+}
+
+// Fonction pour mettre à jour les contrôles de pagination
+function updatePaginationControls() {
+    const { currentPage, totalPages, totalItems, itemsPerPage } = paginationState;
+    const container = $('pagination-container');
+    
+    if (totalPages <= 1) {
+        container.innerHTML = '';
+        return;
+    }
+    
+    const startItem = totalItems === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
+    const endItem = Math.min(currentPage * itemsPerPage, totalItems);
+    
+    let paginationHTML = `
+        <button class="pagination-button" onclick="goToPage(1)" ${currentPage === 1 ? 'disabled' : ''}>
+            <i class="fas fa-angle-double-left"></i>
+        </button>
+        <button class="pagination-button" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
+            <i class="fas fa-angle-left"></i>
+        </button>
+    `;
+    
+    // Générer les numéros de page
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    
+    // Ajuster si on est près de la fin
+    if (endPage - startPage + 1 < maxVisiblePages) {
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+    
+    // Ajouter "..." au début si nécessaire
+    if (startPage > 1) {
+        paginationHTML += `<button class="pagination-button" onclick="goToPage(1)">1</button>`;
+        if (startPage > 2) {
+            paginationHTML += `<span class="pagination-ellipsis">...</span>`;
+        }
+    }
+    
+    // Ajouter les numéros de page
+    for (let i = startPage; i <= endPage; i++) {
+        paginationHTML += `
+            <button class="pagination-button ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">
+                ${i}
+            </button>
+        `;
+    }
+    
+    // Ajouter "..." à la fin si nécessaire
+    if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+            paginationHTML += `<span class="pagination-ellipsis">...</span>`;
+        }
+        paginationHTML += `<button class="pagination-button" onclick="goToPage(${totalPages})">${totalPages}</button>`;
+    }
+    
+    paginationHTML += `
+        <button class="pagination-button" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
+            <i class="fas fa-angle-right"></i>
+        </button>
+        <button class="pagination-button" onclick="goToPage(${totalPages})" ${currentPage === totalPages ? 'disabled' : ''}>
+            <i class="fas fa-angle-double-right"></i>
+        </button>
+        <div class="pagination-info">
+            Affichage de ${startItem} à ${endItem} sur ${totalItems} cargaisons
+        </div>
+    `;
+    
+    container.innerHTML = paginationHTML;
+}
+
+// Fonction pour aller à une page spécifique
+function goToPage(page) {
+    if (page < 1 || page > paginationState.totalPages) return;
+    
+    paginationState.currentPage = page;
+    displayCargaisonsWithPagination();
+}
+
+// Fonction pour changer le nombre d'éléments par page
+function changeItemsPerPage(newItemsPerPage) {
+    paginationState.itemsPerPage = parseInt(newItemsPerPage);
+    paginationState.totalPages = Math.ceil(paginationState.totalItems / paginationState.itemsPerPage);
+    paginationState.currentPage = 1; // Retourner à la première page
+    displayCargaisonsWithPagination();
 }
 
 // Fonction pour créer une modal personnalisée
@@ -1239,6 +1367,11 @@ function initForms() {
     $('colis-type-produit')?.addEventListener('change', updateCargaisonOptions);
     $('colis-type-cargaison')?.addEventListener('change', (e) => {
         loadCargaisonsDisponibles(e.target.value);
+    });
+    
+    // Event listener pour le sélecteur d'éléments par page
+    $('items-per-page')?.addEventListener('change', (e) => {
+        changeItemsPerPage(e.target.value);
     });
 }
 
