@@ -3,6 +3,7 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 const fetch = require('node-fetch');
+const MessageService = require('./services/MessageService');
 
 // Charger les variables d'environnement
 require('dotenv').config();
@@ -359,14 +360,35 @@ app.post('/api/cargaisons/:id/start', async (req, res) => {
     cargaison.dateDepart = new Date().toISOString();
     await ApiService.updateCargaison(id, cargaison);
     
-    // Mettre tous les colis de cette cargaison en cours
+    // Mettre tous les colis de cette cargaison en cours et envoyer notifications
     for (const colis of colisInCargaison) {
       if (colis.etat === 'EN_ATTENTE') {
         colis.etat = 'EN_COURS';
         await ApiService.updateColis(colis.id, colis);
+        
+        // Envoyer notification de départ
+        try {
+          const clients = loadJSON('clients.json');
+          const expediteur = clients.find(c => c.telephone === colis.expediteur);
+          const destinataire = clients.find(c => c.telephone === colis.destinataire);
+          
+          if (expediteur && destinataire) {
+            const colisAvecDetails = {
+              ...colis,
+              expediteur,
+              destinataire,
+              dateDepart: cargaison.dateDepart,
+              cargaisonId: id
+            };
+            await MessageService.notifierColis('colis_parti', colisAvecDetails);
+          }
+        } catch (error) {
+          console.error('Erreur notification départ colis:', error);
+        }
       }
     }
     
+    console.log(`📧 ${colisInCargaison.length} notifications de départ envoyées`);
     res.json({ message: 'Cargaison démarrée' });
   } catch (error) {
     console.error('Erreur lors du démarrage de la cargaison:', error);
@@ -395,7 +417,7 @@ app.post('/api/cargaisons/:id/reopen', (req, res) => {
   }
 });
 
-app.post('/api/cargaisons/:id/arrive', (req, res) => {
+app.post('/api/cargaisons/:id/arrive', async (req, res) => {
   try {
     const { id } = req.params;
     const cargaisons = loadJSON('cargaisons.json');
@@ -405,17 +427,43 @@ app.post('/api/cargaisons/:id/arrive', (req, res) => {
       cargaisons[index].etatAvancement = 'ARRIVE';
       cargaisons[index].dateArriveeReelle = new Date().toISOString();
       
-      // Mettre tous les colis de cette cargaison comme arrivés
+      // Mettre tous les colis de cette cargaison comme arrivés et envoyer notifications
       const colisList = loadJSON('colis.json');
-      colisList.forEach(c => {
-        if (c.cargaisonId === id && c.etat === 'EN_COURS') {
-          c.etat = 'ARRIVE';
-          c.dateArrivee = new Date().toISOString();
+      const clients = loadJSON('clients.json');
+      const dateArrivee = new Date().toISOString();
+      
+      for (const colis of colisList) {
+        if (colis.cargaisonId === id && colis.etat === 'EN_COURS') {
+          colis.etat = 'ARRIVE';
+          colis.dateArrivee = dateArrivee;
+          
+          // Envoyer notification d'arrivée
+          try {
+            const expediteur = clients.find(c => c.telephone === colis.expediteur);
+            const destinataire = clients.find(c => c.telephone === colis.destinataire);
+            
+            if (expediteur && destinataire) {
+              const colisAvecDetails = {
+                ...colis,
+                expediteur,
+                destinataire,
+                dateArrivee,
+                cargaisonId: id
+              };
+              await MessageService.notifierColis('colis_arrive', colisAvecDetails);
+            }
+          } catch (error) {
+            console.error('Erreur notification arrivée colis:', error);
+          }
         }
-      });
+      }
       
       saveJSON('cargaisons.json', cargaisons);
       saveJSON('colis.json', colisList);
+      
+      const colisArrivés = colisList.filter(c => c.cargaisonId === id && c.etat === 'ARRIVE');
+      console.log(`📧 ${colisArrivés.length} notifications d'arrivée envoyées`);
+      
       res.json({ message: 'Cargaison marquée comme arrivée' });
     } else {
       res.status(404).json({ error: 'Cargaison non trouvée' });
@@ -485,8 +533,8 @@ app.post('/api/colis', async (req, res) => {
     // Vérifier si la cargaison peut supporter le poids supplémentaire
     const colisList = await ApiService.getColis();
     const colisExistants = colisList.filter(c => c.cargaisonId === cargaisonOuverte.id);
-    const poidsActuel = colisExistants.reduce((total, c) => total + (c.poids * c.nombreColis || 0), 0);
-    const poidsTotal = poids * nombreColis;
+    const poidsActuel = colisExistants.reduce((total, c) => total + (c.poids || 0), 0);
+    const poidsTotal = poids; // poids est déjà le poids total
     const nouveauPoidsTotal = poidsActuel + poidsTotal;
 
     if (nouveauPoidsTotal > cargaisonOuverte.poidsMax) {
@@ -602,6 +650,19 @@ Prix final: ${prixFinal.toLocaleString()} FCFA
 Date d'expédition: ${new Date().toLocaleDateString()}
 =========================`;
 
+    // Envoyer les notifications de création
+    try {
+      const colisAvecDetails = {
+        ...colis,
+        expediteur,
+        destinataire
+      };
+      await MessageService.notifierColis('colis_cree', colisAvecDetails);
+      console.log('📧 Notifications de création envoyées');
+    } catch (error) {
+      console.error('Erreur envoi notifications:', error);
+    }
+
     res.status(201).json({ message: 'Colis créé', colis, recu });
   } catch (error) {
     console.error('Erreur création colis:', error);
@@ -617,6 +678,67 @@ app.get('/api/colis/search', authenticateToken, (req, res) => {
     const colis = colisList.find(c => c.id === code || c.codeDestinataire === code);
     res.json(colis || null);
   } catch (error) {
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
+// Marquer un colis comme perdu
+app.post('/api/colis/:id/lost', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const colisList = loadJSON('colis.json');
+    const colisIndex = colisList.findIndex(c => c.id === id || c.codeDestinataire === id);
+    
+    if (colisIndex === -1) {
+      return res.status(404).json({ error: 'Colis non trouvé' });
+    }
+    
+    const colis = colisList[colisIndex];
+    
+    // Vérifier que le colis n'est pas déjà arrivé
+    if (colis.etat === 'ARRIVE') {
+      return res.status(400).json({ error: 'Impossible de marquer comme perdu un colis déjà arrivé' });
+    }
+    
+    // Marquer comme perdu
+    colis.etat = 'PERDU';
+    colis.datePerdu = new Date().toISOString();
+    
+    // Envoyer notifications de perte
+    try {
+      const clients = loadJSON('clients.json');
+      const expediteur = clients.find(c => c.telephone === colis.expediteur);
+      const destinataire = clients.find(c => c.telephone === colis.destinataire);
+      
+      if (expediteur && destinataire) {
+        const colisAvecDetails = {
+          ...colis,
+          expediteur,
+          destinataire,
+          cargaisonId: colis.cargaisonId
+        };
+        await MessageService.notifierColis('colis_perdu', colisAvecDetails);
+        console.log('📧 Notifications de perte envoyées');
+      }
+    } catch (error) {
+      console.error('Erreur notification perte colis:', error);
+    }
+    
+    saveJSON('colis.json', colisList);
+    res.json({ message: 'Colis marqué comme perdu et notifications envoyées' });
+  } catch (error) {
+    console.error('Erreur marquage colis perdu:', error);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
+// Route pour obtenir les messages
+app.get('/api/messages', (req, res) => {
+  try {
+    const messages = MessageService.obtenirMessages();
+    res.json(messages);
+  } catch (error) {
+    console.error('Erreur récupération messages:', error);
     res.status(500).json({ error: 'Erreur serveur' });
   }
 });
@@ -775,7 +897,12 @@ app.get('/api/statistiques', authenticateToken, async (req, res) => {
       colisArrivees: colisList.filter(c => c.etat === 'ARRIVE').length,
       colisRecuperes: colisList.filter(c => c.etat === 'RECUPERE').length,
       colisPerdus: colisList.filter(c => c.etat === 'PERDU').length,
-      revenuTotal: colisList.reduce((total, c) => total + (c.prixFinal || 0), 0)
+      revenuTotal: colisList.reduce((total, c) => total + (c.prixFinal || 0), 0),
+      
+      // Données pour les graphiques
+      transportMaritime: cargaisons.filter(c => c.type === 'maritime').length,
+      transportAerien: cargaisons.filter(c => c.type === 'aerienne').length,
+      transportRoutier: cargaisons.filter(c => c.type === 'routiere').length
     };
 
     res.json(stats);

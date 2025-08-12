@@ -146,7 +146,7 @@ function searchLocation() {
     const query = searchInput.value.trim();
     
     if (!query) {
-        alert('Veuillez entrer un lieu à rechercher');
+        showNotification('Veuillez entrer un lieu à rechercher', 'warning');
         return;
     }
     
@@ -170,19 +170,19 @@ function searchLocation() {
                 // Vider le champ de recherche
                 searchInput.value = '';
             } else {
-                alert('Lieu non trouvé. Essayez avec un autre nom.');
+                showNotification('Lieu non trouvé. Essayez avec un autre nom.', 'warning');
             }
         })
         .catch(error => {
             console.error('Erreur de recherche:', error);
-            alert('Erreur lors de la recherche. Vérifiez votre connexion.');
+            showNotification('Erreur lors de la recherche. Vérifiez votre connexion.', 'error');
         });
 }
 
 // Confirmer la sélection du lieu
 function confirmLocationSelection() {
     if (!selectedLocation) {
-        alert('Veuillez sélectionner un lieu sur la carte');
+        showNotification('Veuillez sélectionner un lieu sur la carte', 'warning');
         return;
     }
     

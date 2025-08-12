@@ -1,0 +1,558 @@
+/**
+ * Styles pour le Lazy Loading - TransCargo
+ * Animations, skeleton screens et indicateurs de chargement
+ */
+
+/* ===== ANIMATIONS DE BASE ===== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ===== CLASSES D'ANIMATION ===== */
+.fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+.slide-in {
+    animation: slideIn 0.5s ease-out;
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+/* ===== SKELETON SCREENS ===== */
+.lazy-skeleton {
+    position: relative;
+    overflow: hidden;
+    background-color: #f3f4f6;
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+.lazy-skeleton::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.6),
+        transparent
+    );
+    animation: shimmer 1.5s infinite;
+}
+
+/* Skeleton pour les cartes de cargaisons */
+.cargaison-skeleton {
+    background: white;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+}
+
+.cargaison-skeleton .skeleton-header {
+    display: flex;
+    align-items: center;
+    justify-content: between;
+    margin-bottom: 1rem;
+}
+
+.cargaison-skeleton .skeleton-avatar {
+    width: 3rem;
+    height: 3rem;
+    background-color: #e5e7eb;
+    border-radius: 50%;
+    margin-right: 0.75rem;
+}
+
+.cargaison-skeleton .skeleton-title {
+    height: 1.25rem;
+    background-color: #e5e7eb;
+    border-radius: 0.25rem;
+    width: 60%;
+    margin-bottom: 0.5rem;
+}
+
+.cargaison-skeleton .skeleton-subtitle {
+    height: 1rem;
+    background-color: #f3f4f6;
+    border-radius: 0.25rem;
+    width: 40%;
+}
+
+.cargaison-skeleton .skeleton-badge {
+    width: 5rem;
+    height: 1.5rem;
+    background-color: #e5e7eb;
+    border-radius: 9999px;
+    margin-left: auto;
+}
+
+.cargaison-skeleton .skeleton-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.cargaison-skeleton .skeleton-item {
+    text-align: center;
+}
+
+.cargaison-skeleton .skeleton-item-label {
+    height: 0.75rem;
+    background-color: #f3f4f6;
+    border-radius: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.cargaison-skeleton .skeleton-item-value {
+    height: 1rem;
+    background-color: #e5e7eb;
+    border-radius: 0.25rem;
+}
+
+.cargaison-skeleton .skeleton-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cargaison-skeleton .skeleton-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.cargaison-skeleton .skeleton-button {
+    width: 4rem;
+    height: 2rem;
+    background-color: #e5e7eb;
+    border-radius: 0.5rem;
+}
+
+.cargaison-skeleton .skeleton-price {
+    width: 6rem;
+    height: 1.5rem;
+    background-color: #10b981;
+    opacity: 0.3;
+    border-radius: 0.25rem;
+}
+
+/* Skeleton pour les colis */
+.colis-skeleton {
+    background: white;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+}
+
+.colis-skeleton .skeleton-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.colis-skeleton .skeleton-checkbox {
+    width: 1rem;
+    height: 1rem;
+    background-color: #e5e7eb;
+    border-radius: 0.25rem;
+}
+
+.colis-skeleton .skeleton-content {
+    flex: 1;
+}
+
+.colis-skeleton .skeleton-line {
+    height: 1rem;
+    background-color: #e5e7eb;
+    border-radius: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.colis-skeleton .skeleton-line.short {
+    width: 60%;
+}
+
+.colis-skeleton .skeleton-line.medium {
+    width: 80%;
+}
+
+/* ===== ÉTATS DE CHARGEMENT ===== */
+.lazy-loading {
+    position: relative;
+    opacity: 0.7;
+}
+
+.lazy-loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.lazy-loaded {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.3s ease-out;
+}
+
+.lazy-error {
+    border: 2px dashed #ef4444;
+    background-color: #fef2f2;
+    color: #dc2626;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    text-align: center;
+}
+
+/* ===== INDICATEURS DE CHARGEMENT ===== */
+.loading-spinner {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    border: 3px solid #f3f4f6;
+    border-radius: 50%;
+    border-top-color: #3b82f6;
+    animation: spin 1s ease-in-out infinite;
+}
+
+.loading-dots {
+    display: inline-flex;
+    gap: 0.25rem;
+}
+
+.loading-dots span {
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: #3b82f6;
+    border-radius: 50%;
+    animation: pulse 1.4s ease-in-out infinite both;
+}
+
+.loading-dots span:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.loading-dots span:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+.loading-bar {
+    width: 100%;
+    height: 0.25rem;
+    background-color: #f3f4f6;
+    border-radius: 0.125rem;
+    overflow: hidden;
+}
+
+.loading-bar::before {
+    content: '';
+    display: block;
+    height: 100%;
+    background-color: #3b82f6;
+    border-radius: 0.125rem;
+    animation: loading-bar-progress 2s ease-in-out infinite;
+}
+
+@keyframes loading-bar-progress {
+    0% {
+        width: 0%;
+        margin-left: 0%;
+    }
+    50% {
+        width: 75%;
+        margin-left: 12.5%;
+    }
+    100% {
+        width: 0%;
+        margin-left: 100%;
+    }
+}
+
+/* ===== BADGES DE STATUT ===== */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.status-attente {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.status-cours {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.status-arrive {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.status-recupere {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.status-perdu {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.status-ferme {
+    background-color: #f3f4f6;
+    color: #374151;
+}
+
+.status-ouvert {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+/* ===== TRANSITIONS ET HOVER ===== */
+.card-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .cargaison-skeleton .skeleton-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .cargaison-skeleton .skeleton-footer {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+    
+    .cargaison-skeleton .skeleton-buttons {
+        justify-content: center;
+    }
+}
+
+/* ===== ACCESSIBILITÉ ===== */
+@media (prefers-reduced-motion: reduce) {
+    .lazy-skeleton::before,
+    .animate-pulse,
+    .animate-spin,
+    .loading-dots span,
+    .loading-bar::before {
+        animation: none;
+    }
+    
+    .fade-in,
+    .slide-in {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* ===== DARK MODE ===== */
+@media (prefers-color-scheme: dark) {
+    .lazy-skeleton {
+        background-color: #374151;
+    }
+    
+    .lazy-skeleton::before {
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.1),
+            transparent
+        );
+    }
+    
+    .cargaison-skeleton,
+    .colis-skeleton {
+        background: #1f2937;
+    }
+    
+    .skeleton-avatar,
+    .skeleton-title,
+    .skeleton-badge,
+    .skeleton-item-value,
+    .skeleton-button,
+    .skeleton-checkbox,
+    .skeleton-line {
+        background-color: #4b5563;
+    }
+    
+    .skeleton-subtitle,
+    .skeleton-item-label {
+        background-color: #374151;
+    }
+    
+    .lazy-error {
+        background-color: #1f2937;
+        border-color: #ef4444;
+        color: #f87171;
+    }
+}
+
+/* ===== UTILITAIRES ===== */
+.lazy-hidden {
+    display: none !important;
+}
+
+.lazy-visible {
+    display: block !important;
+}
+
+.lazy-fade-out {
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+}
+
+.lazy-fade-in {
+    opacity: 1;
+    transition: opacity 0.3s ease-in;
+}
+
+/* ===== SCROLL INFINI ===== */
+.scroll-sentinel {
+    height: 1px;
+    margin: 2rem 0;
+}
+
+.end-of-list {
+    text-align: center;
+    padding: 2rem;
+    color: #6b7280;
+    font-style: italic;
+}
+
+.end-of-list i {
+    margin-bottom: 0.5rem;
+    opacity: 0.5;
+}
+
+/* ===== MODAL DE CONFIRMATION ===== */
+.confirmation-modal {
+    backdrop-filter: blur(4px);
+}
+
+.confirmation-modal .modal-content {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.confirmation-modal .modal-icon {
+    animation: pulse 2s infinite;
+}
+
+/* ===== SÉLECTION MULTIPLE ===== */
+.bulk-selection-bar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 1rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.selected-item {
+    background-color: #eff6ff !important;
+    border-color: #3b82f6 !important;
+}
+
+.selection-checkbox:checked {
+    background-color: #3b82f6;
+    border-color: #3b82f6;
+}
+
+/* ===== PERFORMANCE ===== */
+.lazy-container {
+    contain: layout style paint;
+}
+
+.lazy-item {
+    will-change: transform, opacity;
+}
+
+/* Force GPU acceleration for smooth animations */
+.card-hover,
+.lazy-loaded,
+.fade-in,
+.slide-in {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}

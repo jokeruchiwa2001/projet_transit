@@ -64,7 +64,8 @@ async function apiCall(endpoint, options = {}) {
                 return { error: `Erreur serveur (${response.status})` };
             }
             
-            throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+            const errorMessage = errorData.error || `HTTP error! status: ${response.status}`;
+            throw new Error(errorMessage);
         }
         
         return await response.json();
@@ -75,11 +76,11 @@ async function apiCall(endpoint, options = {}) {
         if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
             console.error('Erreur de connexion réseau');
             showNotification('Problème de connexion réseau', 'error');
-            return { error: 'Problème de connexion réseau' };
+            throw new Error('Problème de connexion réseau');
         }
         
-        showNotification('Erreur de communication avec le serveur', 'error');
-        return { error: error.message };
+        // Relancer l'erreur au lieu de la retourner
+        throw error;
     }
 }
 
@@ -176,15 +177,19 @@ $$('.search-tab-button').forEach(button => {
 // Gestion des cargaisons
 async function createCargaison(formData) {
     try {
+        console.log('🚛 Création de cargaison...');
         const data = await apiCall('/cargaisons', {
             method: 'POST',
             body: JSON.stringify(formData)
         });
         
         showNotification('Cargaison créée avec succès', 'success');
-        loadCargaisons();
+        console.log('📝 Rechargement des cargaisons...');
+        await loadCargaisons();
+        console.log('✅ Cargaisons rechargées');
         return data;
     } catch (error) {
+        console.error('❌ Erreur création cargaison:', error);
         showNotification('Erreur lors de la création de la cargaison', 'error');
         throw error;
     }
@@ -192,10 +197,14 @@ async function createCargaison(formData) {
 
 async function loadCargaisons() {
     try {
+        console.log('📡 Chargement des cargaisons...');
         showLoading('liste-cargaisons');
         const cargaisons = await apiCall('/cargaisons');
+        console.log(`📦 ${cargaisons.length} cargaisons reçues`);
         displayCargaisons(cargaisons);
+        console.log('✅ Affichage des cargaisons terminé');
     } catch (error) {
+        console.error('❌ Erreur chargement cargaisons:', error);
         displayError('liste-cargaisons', 'Erreur lors du chargement des cargaisons');
     }
 }
@@ -278,118 +287,206 @@ function displayCargaisons(cargaisons) {
     `).join('');
 }
 
+// Fonction pour créer une modal personnalisée
+function createCustomModal(title, content, buttons = []) {
+    // Supprimer toute modal existante
+    const existingModal = document.getElementById('custom-modal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+
+    const modal = document.createElement('div');
+    modal.id = 'custom-modal';
+    modal.style.cssText = `
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+        background: rgba(0,0,0,0.5); z-index: 10000; display: flex; 
+        align-items: center; justify-content: center;
+    `;
+
+    const modalContent = document.createElement('div');
+    modalContent.style.cssText = `
+        background: white; padding: 2rem; border-radius: 8px; 
+        max-width: 500px; width: 90%; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        max-height: 80vh; overflow-y: auto;
+    `;
+
+    modalContent.innerHTML = `
+        <h3 style="margin-top: 0; color: #333;">${title}</h3>
+        <div style="margin: 1rem 0;">${content}</div>
+        <div style="text-align: right; margin-top: 1.5rem;">
+            ${buttons.map(btn => `<button class="btn ${btn.class || 'btn-secondary'}" onclick="${btn.onclick}" style="margin-left: 0.5rem;">${btn.text}</button>`).join('')}
+            <button class="btn btn-secondary" onclick="closeCustomModal()" style="margin-left: 0.5rem;">Fermer</button>
+        </div>
+    `;
+
+    modal.appendChild(modalContent);
+    document.body.appendChild(modal);
+
+    // Fermer avec Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeCustomModal();
+    });
+
+    return modal;
+}
+
+function closeCustomModal() {
+    const modal = document.getElementById('custom-modal');
+    if (modal) modal.remove();
+}
+
+// Remplacer les alerts par des modales personnalisées
+function customAlert(message, title = 'Information') {
+    createCustomModal(title, message);
+}
+
+function customConfirm(message, onConfirm, title = 'Confirmation') {
+    createCustomModal(title, message, [
+        { text: 'Confirmer', class: 'btn-primary', onclick: `closeCustomModal(); ${onConfirm}()` }
+    ]);
+}
+
 // Actions sur les cargaisons
 async function viewCargaisonDetails(id) {
     try {
+        // Stocker l'ID de la cargaison actuellement affichée
+        window.currentCargaisonId = id;
+        
+        // Afficher loading avec notre système de modal personnalisé
+        createCustomModal('Chargement...', '<div class="text-center"><i class="fas fa-spinner fa-spin fa-2x"></i><p>Chargement des détails...</p></div>');
+
+        // Charger les données
         const cargaisons = await apiCall('/cargaisons');
         const cargaison = cargaisons.find(c => c.id === id);
         if (!cargaison) {
-            showNotification('Cargaison non trouvée', 'error');
+            createCustomModal('Erreur', '<div class="text-center"><i class="fas fa-exclamation-triangle fa-2x text-warning"></i><p>Cargaison non trouvée</p></div>');
             return;
         }
         
         const colis = await apiCall(`/cargaisons/${id}/colis`);
         
-        const modalBody = $('modal-body');
-        modalBody.innerHTML = `
-            <h3><i class="fas fa-ship"></i> Détails de la cargaison ${cargaison.numero}</h3>
-            
-            <div class="result-details">
-                <div class="result-detail">
-                    <strong>Type</strong>
-                    <span>${formatTransportType(cargaison.type)}</span>
+        // Compter les colis par état
+        const colisArrivesOuEnCours = colis ? colis.filter(c => c.etat === 'ARRIVE' || c.etat === 'EN_COURS') : [];
+        const colisArrivesCount = colis ? colis.filter(c => c.etat === 'ARRIVE').length : 0;
+        
+        // Afficher les détails dans notre modal personnalisée
+        const detailsContent = `
+            <div class="result-details" style="margin-bottom: 1rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
+                    <strong>Type:</strong> <span>${formatTransportType(cargaison.type)}</span>
+                    <strong>Distance:</strong> <span>${cargaison.distance} km</span>
+                    <strong>Poids max:</strong> <span>${cargaison.poidsMax} kg</span>
+                    <strong>Colis:</strong> <span>${cargaison.colisIds?.length || 0}</span>
+                    <strong>Prix total:</strong> <span>${(cargaison.prixTotal || 0).toLocaleString()} FCFA</span>
+                    <strong>État:</strong> <span class="badge ${getStatusBadgeClass(cargaison.etatAvancement)}">${formatStatus(cargaison.etatAvancement)}</span>
                 </div>
-                <div class="result-detail">
-                    <strong>Trajet</strong>
-                    <span>${cargaison.trajet.depart.lieu} → ${cargaison.trajet.arrivee.lieu}</span>
-                </div>
-                <div class="result-detail">
-                    <strong>Coordonnées départ</strong>
-                    <span>${cargaison.trajet.depart.latitude.toFixed(6)}, ${cargaison.trajet.depart.longitude.toFixed(6)}</span>
-                </div>
-                <div class="result-detail">
-                    <strong>Coordonnées arrivée</strong>
-                    <span>${cargaison.trajet.arrivee.latitude.toFixed(6)}, ${cargaison.trajet.arrivee.longitude.toFixed(6)}</span>
-                </div>
-                <div class="result-detail">
-                    <strong>Distance</strong>
-                    <span>${cargaison.distance} km</span>
-                </div>
-                <div class="result-detail">
-                    <strong>Poids max</strong>
-                    <span>${cargaison.poidsMax} kg</span>
-                </div>
-                <div class="result-detail">
-                    <strong>État</strong>
-                    <span class="badge ${getStatusBadgeClass(cargaison.etatAvancement)}">
-                        ${formatStatus(cargaison.etatAvancement)}
-                    </span>
-                </div>
-                <div class="result-detail">
-                    <strong>Colis</strong>
-                    <span>${cargaison.colisIds?.length || 0}</span>
-                </div>
-                <div class="result-detail">
-                    <strong>Prix total</strong>
-                    <span>${(cargaison.prixTotal || 0).toLocaleString()} FCFA</span>
+                <div style="margin: 1rem 0;">
+                    <strong>Trajet:</strong> ${cargaison.trajet.depart.lieu} → ${cargaison.trajet.arrivee.lieu}
                 </div>
             </div>
             
             ${colis && colis.length > 0 ? `
+                <!-- Actions en lot pour les colis -->
+                <div class="bulk-actions" style="margin: 1.5rem 0; padding: 1rem; background: #f8f9fa; border-radius: 0.5rem; border: 1px solid #dee2e6;">
+                    <h4 style="margin-bottom: 1rem; color: #495057; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-tasks"></i> Actions en lot sur les colis
+                    </h4>
+                    <div class="btn-group" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        ${colisArrivesOuEnCours.length > 0 ? `
+                            <button class="btn btn-danger" onclick="markAllColisAsLost('${id}')"
+                                    style="background: #dc3545; border: 1px solid #dc3545; color: white; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: pointer; display: flex; align-items: center; gap: 0.25rem; font-size: 0.875rem;">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                Marquer tous comme perdus (${colisArrivesOuEnCours.length})
+                            </button>
+                        ` : ''}
+                        ${colisArrivesCount > 0 ? `
+                            <button class="btn btn-success" onclick="markAllColisAsRecovered('${id}')"
+                                    style="background: #28a745; border: 1px solid #28a745; color: white; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: pointer; display: flex; align-items: center; gap: 0.25rem; font-size: 0.875rem;">
+                                <i class="fas fa-check-circle"></i>
+                                Marquer tous comme récupérés (${colisArrivesCount})
+                            </button>
+                        ` : ''}
+                    </div>
+                    ${colisArrivesOuEnCours.length === 0 ? `
+                        <p style="color: #6c757d; margin: 0; font-style: italic; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-info-circle"></i>
+                            Aucun colis disponible pour les actions en lot
+                        </p>
+                    ` : ''}
+                </div>
+                
                 <h4>Colis dans cette cargaison :</h4>
                 <div class="colis-list">
                     ${colis.map(c => `
-                        <div class="card" style="margin-bottom: 1rem;">
-                            <div class="card-content">
-                                <div class="result-details">
-                                    <div class="result-detail">
-                                        <strong>Code</strong>
-                                        <span>${c.id}</span>
-                                    </div>
-                                    <div class="result-detail">
-                                        <strong>Expéditeur</strong>
-                                        <span>${c.expediteur.prenom} ${c.expediteur.nom}</span>
-                                    </div>
-                                    <div class="result-detail">
-                                        <strong>Destinataire</strong>
-                                        <span>${c.destinataire.nomComplet}</span>
-                                    </div>
-                                    <div class="result-detail">
-                                        <strong>Poids</strong>
-                                        <span>${c.poids} kg</span>
-                                    </div>
-                                    <div class="result-detail">
-                                        <strong>État</strong>
-                                        <span class="badge ${getStatusBadgeClass(c.etat)}">${formatStatus(c.etat)}</span>
-                                    </div>
-                                </div>
+                        <div style="border: 1px solid #ddd; padding: 1rem; margin: 0.5rem 0; border-radius: 4px; background: white;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                <strong>Code:</strong> <span>${c.id}</span>
+                                <strong>Poids:</strong> <span>${c.poids} kg</span>
+                                <strong>Expéditeur:</strong> <span>${c.expediteur.prenom} ${c.expediteur.nom}</span>
+                                <strong>Destinataire:</strong> <span>${c.destinataire.nomComplet}</span>
+                                <strong>État:</strong> <span class="badge ${getStatusBadgeClass(c.etat)}">${formatStatus(c.etat)}</span>
+                            </div>
+                            <!-- Actions individuelles -->
+                            <div class="individual-actions" style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                                ${c.etat === 'ARRIVE' ? `
+                                    <button class="btn btn-sm btn-success" onclick="markColisRecupere('${c.id}')"
+                                            style="font-size: 0.75rem; padding: 0.25rem 0.5rem; background: #28a745; border: 1px solid #28a745; color: white; border-radius: 0.25rem; cursor: pointer;">
+                                        <i class="fas fa-check"></i> Récupéré
+                                    </button>
+                                ` : ''}
+                                ${(c.etat === 'EN_COURS' || c.etat === 'ARRIVE') ? `
+                                    <button class="btn btn-sm btn-danger" onclick="markColisPerdu('${c.id}')"
+                                            style="font-size: 0.75rem; padding: 0.25rem 0.5rem; background: #dc3545; border: 1px solid #dc3545; color: white; border-radius: 0.25rem; cursor: pointer;">
+                                        <i class="fas fa-times"></i> Perdu
+                                    </button>
+                                ` : ''}
                             </div>
                         </div>
                     `).join('')}
                 </div>
             ` : '<p>Aucun colis dans cette cargaison</p>'}
-            
-            <div class="text-center" style="margin-top: 2rem;">
-                <button class="btn btn-secondary" onclick="closeModal()">
-                    <i class="fas fa-times"></i> Fermer
-                </button>
-            </div>
         `;
         
-        $('modal').style.display = 'block';
+        createCustomModal(`<i class="fas fa-ship"></i> Détails - ${cargaison.numero}`, detailsContent);
+        
     } catch (error) {
-        showNotification('Erreur lors du chargement des détails', 'error');
+        console.error('Erreur détails cargaison:', error);
+        createCustomModal('Erreur',
+            `<div class="text-center">
+                <i class="fas fa-exclamation-circle fa-2x text-danger"></i>
+                <h4>Erreur de chargement</h4>
+                <p>Impossible de charger les détails de la cargaison.</p>
+                <p><small>Erreur: ${error.message || 'Erreur inconnue'}</small></p>
+            </div>`,
+            [{ text: 'Réessayer', class: 'btn-primary', onclick: `viewCargaisonDetails('${id}')` }]
+        );
     }
 }
 
 async function closeCargaison(id) {
-    if (!confirm('Êtes-vous sûr de vouloir fermer cette cargaison ?')) return;
+    // Stocker l'ID globalement pour la confirmation
+    window.pendingCloseCargaisonId = id;
+    customConfirm('Êtes-vous sûr de vouloir fermer cette cargaison ?', 'doCloseCargaison', 'Confirmer la fermeture');
+}
+
+async function doCloseCargaison() {
+    const id = window.pendingCloseCargaisonId;
+    console.log('🔒 Fermeture cargaison avec ID:', id);
+    
+    if (!id) {
+        console.error('❌ ID de cargaison manquant');
+        showNotification('Erreur: ID de cargaison manquant', 'error');
+        return;
+    }
     
     try {
         await apiCall(`/cargaisons/${id}/close`, { method: 'POST' });
         showNotification('Cargaison fermée', 'success');
-        loadCargaisons();
+        console.log('🔄 Rechargement après fermeture cargaison...');
+        await loadCargaisons();
+        console.log('✅ Interface mise à jour');
     } catch (error) {
+        console.error('❌ Erreur fermeture cargaison:', error);
         showNotification(error.message || 'Erreur lors de la fermeture', 'error');
     }
 }
@@ -398,7 +495,13 @@ async function reopenCargaison(id) {
     try {
         await apiCall(`/cargaisons/${id}/reopen`, { method: 'POST' });
         showNotification('Cargaison rouverte', 'success');
-        loadCargaisons();
+        await loadCargaisons();
+        
+        // Actualiser aussi les cargaisons disponibles si on est sur le formulaire colis
+        const typeCargaisonColis = $('colis-type-cargaison')?.value;
+        if (typeCargaisonColis) {
+            await loadCargaisonsDisponibles(typeCargaisonColis);
+        }
     } catch (error) {
         showNotification(error.message || 'Erreur lors de la réouverture', 'error');
     }
@@ -408,7 +511,13 @@ async function startCargaison(id) {
     try {
         await apiCall(`/cargaisons/${id}/start`, { method: 'POST' });
         showNotification('Cargaison démarrée', 'success');
-        loadCargaisons();
+        await loadCargaisons();
+        
+        // Actualiser aussi les cargaisons disponibles si on est sur le formulaire colis
+        const typeCargaisonColis = $('colis-type-cargaison')?.value;
+        if (typeCargaisonColis) {
+            await loadCargaisonsDisponibles(typeCargaisonColis);
+        }
     } catch (error) {
         showNotification(error.message || 'Erreur lors du démarrage', 'error');
     }
@@ -418,7 +527,13 @@ async function markCargaisonArrived(id) {
     try {
         await apiCall(`/cargaisons/${id}/arrive`, { method: 'POST' });
         showNotification('Cargaison marquée comme arrivée', 'success');
-        loadCargaisons();
+        await loadCargaisons();
+        
+        // Actualiser aussi les cargaisons disponibles si on est sur le formulaire colis
+        const typeCargaisonColis = $('colis-type-cargaison')?.value;
+        if (typeCargaisonColis) {
+            await loadCargaisonsDisponibles(typeCargaisonColis);
+        }
     } catch (error) {
         showNotification('Erreur lors de la mise à jour', 'error');
     }
@@ -483,22 +598,56 @@ function displayStatistiques(stats) {
     `;
 }
 
+// Variables globales pour les graphiques
+let transportChart = null;
+let colisChart = null;
+
 // Graphiques
 function createCharts(stats) {
+    console.log('📊 Création des graphiques avec stats:', stats);
+    
+    // Détruire les graphiques existants
+    if (transportChart) {
+        transportChart.destroy();
+        transportChart = null;
+    }
+    if (colisChart) {
+        colisChart.destroy();
+        colisChart = null;
+    }
+    
     // Graphique des types de transport
     const transportCtx = $('transport-chart')?.getContext('2d');
+    console.log('📈 Context transport-chart:', transportCtx);
     if (transportCtx && typeof Chart !== 'undefined') {
-        new Chart(transportCtx, {
+        const transportData = {
+            maritime: stats.transportMaritime || 0,
+            aerien: stats.transportAerien || 0,
+            routier: stats.transportRoutier || 0
+        };
+        
+        console.log('✅ Création du graphique transport avec données:', transportData);
+        
+        // Si toutes les valeurs sont à 0, ajouter une valeur par défaut pour l'affichage
+        const totalTransport = transportData.maritime + transportData.aerien + transportData.routier;
+        let chartData, chartLabels;
+        
+        if (totalTransport === 0) {
+            chartData = [1];
+            chartLabels = ['Aucune donnée'];
+            console.log('⚠️ Aucune donnée de transport, affichage du message par défaut');
+        } else {
+            chartData = [transportData.maritime, transportData.aerien, transportData.routier];
+            chartLabels = ['Maritime', 'Aérienne', 'Routière'];
+        }
+        
+        transportChart = new Chart(transportCtx, {
             type: 'doughnut',
             data: {
-                labels: ['Maritime', 'Aérienne', 'Routière'],
+                labels: chartLabels,
                 datasets: [{
-                    data: [
-                        stats.transportMaritime || 0,
-                        stats.transportAerien || 0,
-                        stats.transportRoutier || 0
-                    ],
-                    backgroundColor: ['#3b82f6', '#10b981', '#f59e0b']
+                    data: chartData,
+                    backgroundColor: totalTransport === 0 ? ['#e5e7eb'] : ['#3b82f6', '#10b981', '#f59e0b']
                 }]
             },
             options: {
@@ -506,16 +655,20 @@ function createCharts(stats) {
                 plugins: {
                     legend: {
                         position: 'bottom'
+                    },
+                    tooltip: {
+                        enabled: totalTransport > 0
                     }
                 }
             }
         });
+        console.log('✅ Graphique transport créé:', transportChart);
     }
     
     // Graphique des états des colis
     const colisCtx = $('colis-chart')?.getContext('2d');
     if (colisCtx && typeof Chart !== 'undefined') {
-        new Chart(colisCtx, {
+        colisChart = new Chart(colisCtx, {
             type: 'bar',
             data: {
                 labels: ['En attente', 'En cours', 'Arrivés', 'Récupérés', 'Perdus'],
@@ -545,7 +698,9 @@ function createCharts(stats) {
                 }
             }
         });
+        console.log('✅ Graphique colis créé:', colisChart);
     }
+    console.log('📊 Création des graphiques terminée');
 }
 
 // Gestion des cargaisons disponibles
@@ -740,24 +895,16 @@ async function markColisRecupere(id) {
     }
 }
 
-async function markColisPerdu(id) {
-    if (!confirm('Êtes-vous sûr de vouloir marquer ce colis comme perdu ?')) return;
-    
-    try {
-        await apiCall(`/colis/${id}/perdu`, { method: 'POST' });
-        showNotification('Colis marqué comme perdu', 'warning');
-        // Recharger la recherche si on est dans la recherche
-        if (currentSearchTab === 'colis-search') {
-            const code = $('search-code-colis').value;
-            if (code) await searchColis(code);
-        }
-    } catch (error) {
-        showNotification('Erreur lors de la mise à jour', 'error');
-    }
-}
+// Cette fonction est maintenant remplacée par la version avec modal personnalisée plus bas
 
 function showReceiptModal(receiptContent) {
     const modalBody = $('modal-body');
+    
+    if (!modalBody) {
+        // Fallback: Afficher dans une modal personnalisée si la modal n'existe pas
+        createCustomModal('Reçu d\'expédition', `<pre style="white-space: pre-wrap; font-family: monospace; background: #f8f9fa; padding: 1rem; border-radius: 0.5rem;">${receiptContent}</pre>`);
+        return;
+    }
     
     modalBody.innerHTML = `
         <h3><i class="fas fa-receipt"></i> Reçu d'expédition</h3>
@@ -981,6 +1128,7 @@ function initForms() {
         };
         
         try {
+            console.log('📋 Formulaire de création de cargaison soumis');
             await createCargaison(formData);
             e.target.reset();
             // Réinitialiser les champs cachés
@@ -990,14 +1138,33 @@ function initForms() {
             $('lieu-depart-lng').value = '';
             $('lieu-arrivee-lat').value = '';
             $('lieu-arrivee-lng').value = '';
+            
+            console.log('🔄 Actualisation des listes de cargaisons pour formulaire colis...');
+            // Actualiser aussi les cargaisons disponibles pour le nouveau colis
+            const typeCargaisonColis = $('colis-type-cargaison')?.value;
+            if (typeCargaisonColis) {
+                try {
+                    await loadCargaisonsDisponibles(typeCargaisonColis);
+                    console.log('✅ Listes cargaisons mises à jour');
+                } catch (err) {
+                    console.error('⚠️ Erreur mise à jour liste cargaisons:', err);
+                }
+            }
         } catch (error) {
-            console.error('Erreur création cargaison:', error);
+            console.error('❌ Erreur création cargaison:', error);
         }
     });
     
     // Formulaire nouveau colis
     $('form-nouveau-colis')?.addEventListener('submit', async (e) => {
         e.preventDefault();
+        
+        const submitBtn = $('btn-enregistrer-colis');
+        const originalContent = submitBtn.innerHTML;
+        
+        // Désactiver le bouton et afficher le spinner
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enregistrement...';
         
         const formData = {
             expediteur: {
@@ -1010,6 +1177,7 @@ function initForms() {
             destinataire: {
                 nomComplet: $('dest-nom').value,
                 telephone: $('dest-telephone').value,
+                email: $('dest-email').value,
                 adresse: $('dest-adresse').value
             },
             poids: parseFloat($('colis-poids').value),
@@ -1030,8 +1198,28 @@ function initForms() {
             e.target.reset();
             // Réinitialiser l'affichage des cargaisons
             $('cargaison-info').style.display = 'none';
+            
+            // Actualiser les listes pour refléter les changements de capacité
+            await loadCargaisons();
+            if (formData.typeCargaison) {
+                await loadCargaisonsDisponibles(formData.typeCargaison);
+            }
+            
+            // Réactiver le bouton avec succès
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-check"></i> Colis enregistré !';
+            
+            // Remettre le texte original après 2 secondes
+            setTimeout(() => {
+                submitBtn.innerHTML = originalContent;
+            }, 2000);
+            
         } catch (error) {
             console.error('Erreur création colis:', error);
+            
+            // Réactiver le bouton en cas d'erreur
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalContent;
         }
     });
     
@@ -1082,3 +1270,285 @@ document.addEventListener('DOMContentLoaded', () => {
     
     console.log('Interface d\'administration TransCargo initialisée');
 });
+
+// Gestion des messages
+async function showMessagesModal() {
+    try {
+        const response = await apiCall('/messages');
+        const messages = Array.isArray(response) ? response : [];
+        
+        const modalContent = `
+            <div class="modal-backdrop" onclick="closeModal()"></div>
+            <div class="modal-content bg-white rounded-lg p-6 max-w-4xl max-h-96 overflow-y-auto">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold">Messages envoyés (${messages.length})</h2>
+                    <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                ${messages.length === 0 ? 
+                    '<p class="text-gray-500 text-center py-8">Aucun message envoyé</p>' :
+                    messages.map(msg => `
+                        <div class="border-b pb-4 mb-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-semibold text-lg">${msg.sujet}</h3>
+                                <span class="text-sm text-gray-500">${new Date(msg.dateEnvoi).toLocaleString('fr-FR')}</span>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-2">
+                                <i class="fas fa-${msg.type === 'email' ? 'envelope' : 'sms'} mr-1"></i>
+                                ${msg.type.toUpperCase()} → ${msg.destinataire}
+                            </p>
+                            <div class="text-sm bg-gray-50 p-3 rounded whitespace-pre-line">${msg.message}</div>
+                        </div>
+                    `).join('')
+                }
+            </div>
+        `;
+        
+        const modal = document.createElement('div');
+        modal.className = 'modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+        modal.innerHTML = modalContent;
+        document.body.appendChild(modal);
+        
+    } catch (error) {
+        console.error('Erreur chargement messages:', error);
+        showNotification('Erreur lors du chargement des messages', 'error');
+    }
+}
+
+// Fonctions pour les actions en lot sur les colis
+async function markAllColisAsLost(cargaisonId) {
+    // Utiliser une modal de confirmation personnalisée
+    createCustomModal(
+        'Confirmation - Marquer comme perdus',
+        '<div class="text-center"><i class="fas fa-exclamation-triangle fa-2x text-warning mb-3"></i><p><strong>Êtes-vous sûr de vouloir marquer TOUS les colis éligibles comme perdus ?</strong></p><p class="text-danger">Cette action ne peut pas être annulée.</p></div>',
+        [
+            {
+                text: 'Confirmer',
+                class: 'btn-danger',
+                onclick: `closeCustomModal(); doMarkAllColisAsLost('${cargaisonId}')`
+            }
+        ]
+    );
+}
+
+async function doMarkAllColisAsLost(cargaisonId) {
+    
+    try {
+        showNotification('Traitement en cours...', 'info');
+        
+        // Récupérer les colis de la cargaison
+        const response = await apiCall(`/cargaisons/${cargaisonId}/colis`);
+        const colis = response || [];
+        
+        // Filtrer les colis éligibles (EN_COURS ou ARRIVE)
+        const colisEligibles = colis.filter(c => c.etat === 'EN_COURS' || c.etat === 'ARRIVE');
+        
+        if (colisEligibles.length === 0) {
+            showNotification('Aucun colis éligible trouvé', 'warning');
+            return;
+        }
+        
+        // Marquer chaque colis comme perdu
+        let successCount = 0;
+        let errorCount = 0;
+        
+        for (const c of colisEligibles) {
+            try {
+                await apiCall(`/colis/${c.id}/perdu`, { method: 'POST' });
+                successCount++;
+            } catch (error) {
+                console.error(`Erreur pour le colis ${c.id}:`, error);
+                errorCount++;
+            }
+        }
+        
+        // Afficher le résultat
+        if (successCount > 0) {
+            showNotification(
+                `${successCount} colis marqués comme perdus${errorCount > 0 ? ` (${errorCount} échecs)` : ''}`,
+                errorCount > 0 ? 'warning' : 'success'
+            );
+        } else {
+            showNotification('Aucun colis n\'a pu être mis à jour', 'error');
+        }
+        
+        // Recharger les détails
+        setTimeout(() => {
+            closeCustomModal();
+            viewCargaisonDetails(cargaisonId);
+        }, 1500);
+        
+    } catch (error) {
+        console.error('Erreur lors du traitement en lot:', error);
+        showNotification('Erreur lors du traitement en lot', 'error');
+    }
+}
+
+async function markAllColisAsRecovered(cargaisonId) {
+    // Utiliser une modal de confirmation personnalisée
+    createCustomModal(
+        'Confirmation - Marquer comme récupérés',
+        '<div class="text-center"><i class="fas fa-check-circle fa-2x text-success mb-3"></i><p><strong>Êtes-vous sûr de vouloir marquer TOUS les colis arrivés comme récupérés ?</strong></p></div>',
+        [
+            {
+                text: 'Confirmer',
+                class: 'btn-success',
+                onclick: `closeCustomModal(); doMarkAllColisAsRecovered('${cargaisonId}')`
+            }
+        ]
+    );
+}
+
+async function doMarkAllColisAsRecovered(cargaisonId) {
+    
+    try {
+        showNotification('Traitement en cours...', 'info');
+        
+        // Récupérer les colis de la cargaison
+        const response = await apiCall(`/cargaisons/${cargaisonId}/colis`);
+        const colis = response || [];
+        
+        // Filtrer les colis arrivés
+        const colisArrives = colis.filter(c => c.etat === 'ARRIVE');
+        
+        if (colisArrives.length === 0) {
+            showNotification('Aucun colis arrivé trouvé', 'warning');
+            return;
+        }
+        
+        // Marquer chaque colis comme récupéré
+        let successCount = 0;
+        let errorCount = 0;
+        
+        for (const c of colisArrives) {
+            try {
+                await apiCall(`/colis/${c.id}/recupere`, { method: 'POST' });
+                successCount++;
+            } catch (error) {
+                console.error(`Erreur pour le colis ${c.id}:`, error);
+                errorCount++;
+            }
+        }
+        
+        // Afficher le résultat
+        if (successCount > 0) {
+            showNotification(
+                `${successCount} colis marqués comme récupérés${errorCount > 0 ? ` (${errorCount} échecs)` : ''}`,
+                errorCount > 0 ? 'warning' : 'success'
+            );
+        } else {
+            showNotification('Aucun colis n\'a pu être mis à jour', 'error');
+        }
+        
+        // Recharger les détails
+        setTimeout(() => {
+            closeCustomModal();
+            viewCargaisonDetails(cargaisonId);
+        }, 1500);
+        
+    } catch (error) {
+        console.error('Erreur lors du traitement en lot:', error);
+        showNotification('Erreur lors du traitement en lot', 'error');
+    }
+}
+
+// Mise à jour des fonctions individuelles pour rafraîchir la modal
+async function markColisRecupere(id) {
+    try {
+        await apiCall(`/colis/${id}/recupere`, { method: 'POST' });
+        showNotification('Colis marqué comme récupéré', 'success');
+        
+        // Recharger les détails de la cargaison si on est dans la modal
+        const cargaisonId = window.currentCargaisonId;
+        if (cargaisonId) {
+            setTimeout(() => {
+                closeCustomModal();
+                viewCargaisonDetails(cargaisonId);
+            }, 1000);
+        }
+        
+        // Recharger la recherche si on est dans la recherche
+        if (currentSearchTab === 'colis-search') {
+            const code = $('search-code-colis').value;
+            if (code) await searchColis(code);
+        }
+    } catch (error) {
+        showNotification('Erreur lors de la mise à jour', 'error');
+    }
+}
+
+async function markColisPerdu(id) {
+    // Utiliser une modal de confirmation personnalisée
+    createCustomModal(
+        'Confirmation - Marquer comme perdu',
+        '<div class="text-center"><i class="fas fa-exclamation-triangle fa-2x text-warning mb-3"></i><p><strong>Êtes-vous sûr de vouloir marquer ce colis comme perdu ?</strong></p></div>',
+        [
+            {
+                text: 'Confirmer',
+                class: 'btn-danger',
+                onclick: `closeCustomModal(); doMarkColisPerdu('${id}')`
+            }
+        ]
+    );
+}
+
+async function doMarkColisPerdu(id) {
+    
+    try {
+        await apiCall(`/colis/${id}/perdu`, { method: 'POST' });
+        showNotification('Colis marqué comme perdu', 'warning');
+        
+        // Recharger les détails de la cargaison si on est dans la modal
+        const cargaisonId = window.currentCargaisonId;
+        if (cargaisonId) {
+            setTimeout(() => {
+                closeCustomModal();
+                viewCargaisonDetails(cargaisonId);
+            }, 1000);
+        }
+        
+        // Recharger la recherche si on est dans la recherche
+        if (currentSearchTab === 'colis-search') {
+            const code = $('search-code-colis').value;
+            if (code) await searchColis(code);
+        }
+    } catch (error) {
+        showNotification('Erreur lors de la mise à jour', 'error');
+    }
+}
+
+function closeModal() {
+    const modal = document.querySelector('.modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+// Fonction pour marquer un colis comme perdu
+async function markPackageLost(colisId) {
+    // Utiliser une modal de confirmation personnalisée
+    createCustomModal(
+        'Confirmation - Marquer comme perdu',
+        '<div class="text-center"><i class="fas fa-exclamation-triangle fa-2x text-warning mb-3"></i><p><strong>Êtes-vous sûr de vouloir marquer ce colis comme perdu ?</strong></p><p class="text-info">Cette action enverra des notifications aux clients.</p></div>',
+        [
+            {
+                text: 'Confirmer',
+                class: 'btn-danger',
+                onclick: `closeCustomModal(); doMarkPackageLost('${colisId}')`
+            }
+        ]
+    );
+}
+
+async function doMarkPackageLost(colisId) {
+    
+    try {
+        await apiCall(`/colis/${colisId}/lost`, { method: 'POST' });
+        showNotification('Colis marqué comme perdu et notifications envoyées', 'success');
+        loadCargaisons(); // Recharger pour mettre à jour l'affichage
+    } catch (error) {
+        showNotification(error.message || 'Erreur lors du marquage comme perdu', 'error');
+    }
+}

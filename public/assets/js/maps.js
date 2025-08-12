@@ -66,9 +66,39 @@ class GPMapsManager {
         } else if (!this.arriveeCoordinates) {
             return 'arrivee';
         } else {
-            // Les deux points sont définis, demander lequel modifier
-            const choice = confirm('Voulez-vous modifier le point de DÉPART ? (Annuler pour modifier l\'ARRIVÉE)');
-            return choice ? 'depart' : 'arrivee';
+            // Les deux points sont définis, utiliser une modal personnalisée
+            return new Promise((resolve) => {
+                if (typeof createCustomModal === 'function') {
+                    createCustomModal(
+                        'Choix du point à modifier',
+                        '<div class="text-center"><p><strong>Voulez-vous modifier le point de DÉPART ou d\'ARRIVÉE ?</strong></p></div>',
+                        [
+                            {
+                                text: 'Départ',
+                                class: 'btn-primary',
+                                onclick: `closeCustomModal(); window.mapPointChoice = 'depart'`
+                            },
+                            {
+                                text: 'Arrivée',
+                                class: 'btn-secondary',
+                                onclick: `closeCustomModal(); window.mapPointChoice = 'arrivee'`
+                            }
+                        ]
+                    );
+                    // Attendre le choix
+                    const checkChoice = setInterval(() => {
+                        if (window.mapPointChoice) {
+                            const choice = window.mapPointChoice;
+                            window.mapPointChoice = null;
+                            clearInterval(checkChoice);
+                            resolve(choice);
+                        }
+                    }, 100);
+                } else {
+                    // Fallback si createCustomModal n'existe pas
+                    resolve('depart');
+                }
+            });
         }
     }
     
@@ -180,7 +210,11 @@ class GPMapsManager {
                 }
             } else {
                 console.error('Erreur calcul route:', status);
-                alert('Impossible de calculer la route entre ces deux points');
+                if (typeof showNotification === 'function') {
+                    showNotification('Impossible de calculer la route entre ces deux points', 'error');
+                } else {
+                    console.error('Impossible de calculer la route entre ces deux points');
+                }
             }
         });
     }

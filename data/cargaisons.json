@@ -209,7 +209,7 @@
     },
     "distance": 109,
     "type": "routiere",
-    "etatAvancement": "EN_COURS",
+    "etatAvancement": "ARRIVE",
     "etatGlobal": "FERME",
     "dateCreation": "2025-08-11T10:51:39.735Z",
     "produits": [],
@@ -217,7 +217,8 @@
       "COL-ME6ZWT3A4K4KK"
     ],
     "prixTotal": 26160000,
-    "dateDepart": "2025-08-11T11:18:48.124Z"
+    "dateDepart": "2025-08-11T11:18:48.124Z",
+    "dateArriveeReelle": "2025-08-12T17:52:24.109Z"
   },
   {
     "id": "CG-ME733RMH1F96C",
@@ -262,11 +263,140 @@
     },
     "distance": 60,
     "type": "maritime",
-    "etatAvancement": "EN_ATTENTE",
+    "etatAvancement": "ARRIVE",
     "etatGlobal": "FERME",
     "dateCreation": "2025-08-11T12:45:25.851Z",
     "produits": [],
-    "colisIds": [],
-    "prixTotal": 0
+    "colisIds": [
+      "COL-ME74MB1WB8O60",
+      "COL-ME753HF63H9UO"
+    ],
+    "prixTotal": 41140000,
+    "dateDepart": "2025-08-11T13:20:04.192Z",
+    "dateArriveeReelle": "2025-08-11T13:20:56.518Z"
+  },
+  {
+    "id": "CG-ME78JB4NR7QKT",
+    "numero": "CG-ME78JB4N",
+    "poidsMax": 2000,
+    "trajet": {
+      "depart": {
+        "lieu": "IRESSEF, Route de l'Aeroport, Commune de Ngor, Arrondissement des Almadies, Dakar, Région de Dakar, 18524, Sénégal",
+        "latitude": 14.746530336221403,
+        "longitude": -17.509460449218754
+      },
+      "arrivee": {
+        "lieu": "Position (48.9975, 282.6563)",
+        "latitude": 48.99751857856909,
+        "longitude": 282.65625000000006
+      }
+    },
+    "distance": 6591,
+    "type": "aerienne",
+    "etatAvancement": "ARRIVE",
+    "etatGlobal": "FERME",
+    "dateCreation": "2025-08-11T14:56:03.863Z",
+    "produits": [],
+    "colisIds": [
+      "COL-ME78LGY5WMTZD",
+      "COL-ME8J4NWIMJ8F1",
+      "COL-ME8K2Y7T1UGZG",
+      "COL-ME8K2ZNZQSU57",
+      "COL-ME8K5CPABR1NP"
+    ],
+    "prixTotal": 26505820000,
+    "dateDepart": "2025-08-12T17:56:50.218Z",
+    "dateArriveeReelle": "2025-08-12T17:56:52.770Z"
+  },
+  {
+    "id": "CG-ME8KU0BQ3PBLD",
+    "numero": "CG-ME8KU0BQ",
+    "poidsMax": 10000,
+    "trajet": {
+      "depart": {
+        "lieu": "Commune de Cambérène, Arrondissement des Parcelles Assainies, Dakar, Région de Dakar, Sénégal",
+        "latitude": 14.765890058649331,
+        "longitude": -17.444057464599613
+      },
+      "arrivee": {
+        "lieu": "Route de Mboro, Merina Guèye, Mboro, Arrondissement de Méouane, Département de Tivaouane, Thiès, Sénégal",
+        "latitude": 15.128671993212496,
+        "longitude": -16.87362670898438
+      }
+    },
+    "distance": 73,
+    "type": "routiere",
+    "etatAvancement": "ARRIVE",
+    "etatGlobal": "FERME",
+    "dateCreation": "2025-08-12T13:28:04.646Z",
+    "produits": [],
+    "colisIds": [
+      "COL-ME8KW6XPFETJJ",
+      "COL-ME8KWAMPEYWLB",
+      "COL-ME8LXGFI4IXGL",
+      "COL-ME8MHOO6YIJ1A"
+    ],
+    "prixTotal": 2455490000,
+    "dateDepart": "2025-08-12T14:23:37.349Z",
+    "dateArriveeReelle": "2025-08-12T17:51:52.144Z"
+  },
+  {
+    "id": "CG-ME8OG8VKQLDST",
+    "numero": "CG-ME8OG8VK",
+    "poidsMax": 21000,
+    "trajet": {
+      "depart": {
+        "lieu": "Position (14.7492, -17.4806)",
+        "latitude": 14.74918643335654,
+        "longitude": -17.48062133789063
+      },
+      "arrivee": {
+        "lieu": "Pal, Communauté rurale de Pire Goureye, Arrondissement de Pambal, Département de Tivaouane, Thiès, Sénégal",
+        "latitude": 15.01993712582829,
+        "longitude": -16.71981811523438
+      }
+    },
+    "distance": 87,
+    "type": "routiere",
+    "etatAvancement": "ARRIVE",
+    "etatGlobal": "FERME",
+    "dateCreation": "2025-08-12T15:09:21.008Z",
+    "produits": [],
+    "colisIds": [
+      "COL-ME8OGRWBYQQSB",
+      "COL-ME8PC72QEORNO",
+      "COL-ME8QCQR36BAUP",
+      "COL-ME8RA5ZINUUXY"
+    ],
+    "prixTotal": 167550000,
+    "dateDepart": "2025-08-12T16:35:29.784Z",
+    "dateArriveeReelle": "2025-08-12T16:35:32.955Z"
+  },
+  {
+    "id": "CG-ME8UHOB60Y0HB",
+    "numero": "CG-ME8UHOB6",
+    "poidsMax": 1000,
+    "trajet": {
+      "depart": {
+        "lieu": "Position (14.7731, -17.3666)",
+        "latitude": 14.773089848248537,
+        "longitude": -17.366638183593754
+      },
+      "arrivee": {
+        "lieu": "Position (15.1618, -16.9121)",
+        "latitude": 15.161811792461327,
+        "longitude": -16.91207885742188
+      }
+    },
+    "distance": 65,
+    "type": "routiere",
+    "etatAvancement": "EN_ATTENTE",
+    "etatGlobal": "OUVERT",
+    "dateCreation": "2025-08-12T17:58:25.362Z",
+    "produits": [],
+    "colisIds": [
+      "COL-ME8UJGP6068KS"
+    ],
+    "prixTotal": 3204500
   }
 ]

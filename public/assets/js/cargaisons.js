@@ -237,10 +237,28 @@ function addProduitModal(id) {
 }
 
 function closeCargaison(id) {
-    if (confirm('Êtes-vous sûr de vouloir fermer cette cargaison ?')) {
+    if (typeof createCustomModal === 'function') {
+        createCustomModal(
+            'Confirmation - Fermer cargaison',
+            '<div class="text-center"><i class="fas fa-lock fa-2x text-warning mb-3"></i><p><strong>Êtes-vous sûr de vouloir fermer cette cargaison ?</strong></p></div>',
+            [
+                {
+                    text: 'Confirmer',
+                    class: 'btn-warning',
+                    onclick: `closeCustomModal(); doCloseCargaison('${id}')`
+                }
+            ]
+        );
+    } else {
+        // Fallback
         console.log('Fermer cargaison:', id);
         // Implémenter la fermeture de cargaison
     }
+}
+
+function doCloseCargaison(id) {
+    console.log('Fermer cargaison:', id);
+    // Implémenter la fermeture de cargaison
 }
 
 // Filtrage et recherche

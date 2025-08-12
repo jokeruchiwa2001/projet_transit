@@ -1,0 +1,1031 @@
+[
+  {
+    "id": "MSG-1754924026238-B6G3LBQJJ",
+    "destinataire": "777123456",
+    "sujet": "✅ Colis créé - TEST123",
+    "message": "Bonjour John Doe,\n\nVotre colis a été créé avec succès !\n\n📦 Numéro de colis: TEST123\n👤 Destinataire: Jane Smith\n📍 Destination: undefined\n⚖️ Poids: 5kg\n📊 Type: Materiel\n🚛 Transport: routiere\n💰 Prix: 15000 FCFA\n\nVotre colis sera traité dès que possible.\n\nCordialement,\nL'équipe TransCargo",
+    "type": "sms",
+    "dateEnvoi": "2025-08-11T14:53:46.239Z",
+    "statut": "envoye"
+  },
+  {
+    "id": "MSG-1754924026241-U2KJI1WEA",
+    "destinataire": "777654321",
+    "sujet": "📦 Colis en route pour vous - TEST123",
+    "message": "Bonjour Jane Smith,\n\nUn colis vous a été envoyé !\n\n📦 Numéro de colis: TEST123\n👤 Expéditeur: John Doe\n⚖️ Poids: 5kg\n📊 Type: Materiel\n🚛 Transport: routiere\n\nVous serez notifié dès son départ et à son arrivée.\n\nCordialement,\nL'équipe TransCargo",
+    "type": "sms",
+    "dateEnvoi": "2025-08-11T14:53:46.241Z",
+    "statut": "envoye"
+  },
+  {
+    "id": "MSG-1754924264775-CH8N0NWG6",
+    "destinataire": "765936790",
+    "sujet": "✅ Colis créé - G4ATWVWI",
+    "message": "Bonjour iieurfiue,\n\nVotre colis a été créé avec succès !\n\n📦 Numéro de colis: G4ATWVWI\n👤 Destinataire: undefined\n📍 Destination: feiuegriue\n⚖️ Poids: 1000kg\n📊 Type: fragile\n🚛 Transport: aerienne\n💰 Prix: 10000000 FCFA\n\nVotre colis sera traité dès que possible.\n\nCordialement,\nL'équipe TransCargo",
+    "type": "sms",
+    "dateEnvoi": "2025-08-11T14:57:44.775Z",
+    "statut": "envoye"
+  },
+  {
+    "id": "MSG-1754924264777-350DFR3S4",
+    "destinataire": "785052217",
+    "sujet": "📦 Colis en route pour vous - G4ATWVWI",
+    "message": "Bonjour undefined,\n\nUn colis vous a été envoyé !\n\n📦 Numéro de colis: G4ATWVWI\n👤 Expéditeur: iieurfiue\n⚖️ Poids: 1000kg\n📊 Type: fragile\n🚛 Transport: aerienne\n\nVous serez notifié dès son départ et à son arrivée.\n\nCordialement,\nL'équipe TransCargo",
+    "type": "sms",
+    "dateEnvoi": "2025-08-11T14:57:44.777Z",
+    "statut": "envoye"
+  },
+  {
+    "id": "MSG-1754925537017-D3U35WYN8",
+    "destinataire": "+221777000000",
+    "sujet": "✅ Colis créé - TEST-SMS-001",
+    "message": "Bonjour Service Test,\n\nVotre colis a été créé avec succès !\n\n📦 Numéro de colis: TEST-SMS-001\n👤 Destinataire: Bachir\n📍 Destination: Dakar, Sénégal\n⚖️ Poids: 2kg\n📊 Type: Materiel\n🚛 Transport: routiere\n💰 Prix: 5000 FCFA\n\nVotre colis sera traité dès que possible.\n\nCordialement,\nL'équipe TransCargo",
+    "type": "sms",
+    "dateEnvoi": "2025-08-11T15:18:57.017Z",
+    "statut": "envoye"
+  },
+  {
+    "id": "MSG-1754925537242-LSZNLD5UU",
+    "destinataire": "+221765936790",
+    "sujet": "📦 Colis en route pour vous - TEST-SMS-001",
+    "message": "Bonjour Bachir,\n\nUn colis vous a été envoyé !\n\n📦 Numéro de colis: TEST-SMS-001\n👤 Expéditeur: Service Test\n⚖️ Poids: 2kg\n📊 Type: Materiel\n🚛 Transport: routiere\n\nVous serez notifié dès son départ et à son arrivée.\n\nCordialement,\nL'équipe TransCargo",
+    "type": "sms",
+    "dateEnvoi": "2025-08-11T15:18:57.242Z",
+    "statut": "echec",
+    "erreur": "Your message does not fit into 1 SMS."
+  },
+  {
+    "id": "MSG-1754925957189-W938L9Z7W",
+    "destinataire": "+221777000000",
+    "sujet": "✅ Colis créé - TEST-SMS-001",
+    "message": "TransCargo: Colis TEST-SMS-001 créé. Dest: Bachir. 2kg. Prix: 5000F",
+    "type": "sms",
+    "dateEnvoi": "2025-08-11T15:25:57.189Z",
+    "statut": "echec",
+    "erreur": "Your message does not fit into 1 SMS."
+  },
+  {
+    "id": "MSG-1754925959631-5604O700N",
+    "destinataire": "+221765936790",
+    "sujet": "📦 Colis en route pour vous - TEST-SMS-001",
+    "message": "TransCargo: Colis TEST-SMS-001 envoyé par Service Test. 2kg. Suivi sur notre site.",
+    "type": "sms",
+    "dateEnvoi": "2025-08-11T15:25:59.631Z",
+    "statut": "echec",
+    "erreur": "Your message does not fit into 1 SMS."
+  },
+  {
+    "id": "MSG-1754926443680-93JA425RO",
+    "destinataire": "+221777000000",
+    "sujet": "✅ Colis créé - TEST-SMS-001",
+    "message": "TransCargo: Colis TEST-SMS-001 créé. Dest: Bachir. 2kg. Prix: 5000F",
+    "type": "sms",
+    "dateEnvoi": "2025-08-11T15:34:03.681Z",
+    "statut": "envoye",
+    "demo": true
+  },
+  {
+    "id": "MSG-1754926443683-KDR80RYBR",
+    "destinataire": "+221765936790",
+    "sujet": "📦 Colis en route pour vous - TEST-SMS-001",
+    "message": "TransCargo: Colis TEST-SMS-001 envoyé par Service Test. 2kg. Suivi sur notre site.",
+    "type": "sms",
+    "dateEnvoi": "2025-08-11T15:34:03.683Z",
+    "statut": "envoye",
+    "demo": true
+  },
+  {
+    "id": "MSG-1754926529598-AHGSNAAMY",
+    "destinataire": "+221765936790",
+    "sujet": "✅ Colis créé - CG-TEST123",
+    "message": "TransCargo: Colis CG-TEST123 créé. Dest: Aminata. 3kg. Prix: 8000F",
+    "type": "sms",
+    "dateEnvoi": "2025-08-11T15:35:29.598Z",
+    "statut": "envoye",
+    "demo": true
+  },
+  {
+    "id": "MSG-1754926529601-XM8R1ACFC",
+    "destinataire": "+221777123456",
+    "sujet": "📦 Colis en route pour vous - CG-TEST123",
+    "message": "TransCargo: Colis CG-TEST123 envoyé par Bachir. 3kg. Suivi sur notre site.",
+    "type": "sms",
+    "dateEnvoi": "2025-08-11T15:35:29.601Z",
+    "statut": "envoye",
+    "demo": true
+  },
+  {
+    "id": "MSG-1754926529604-SK3Y3Q30Y",
+    "destinataire": "+221765936790",
+    "sujet": "🚛 Colis en transit - CG-TEST123",
+    "message": "TransCargo: Colis CG-TEST123 parti le 11/08/2025. En route vers Aminata.",
+    "type": "sms",
+    "dateEnvoi": "2025-08-11T15:35:29.604Z",
+    "statut": "envoye",
+    "demo": true
+  },
+  {
+    "id": "MSG-1754926529605-1639YKGWQ",
+    "destinataire": "+221777123456",
+    "sujet": "🚛 Votre colis est en route - CG-TEST123",
+    "message": "TransCargo: Colis CG-TEST123 en transit depuis le 11/08/2025. Arrivée prochaine.",
+    "type": "sms",
+    "dateEnvoi": "2025-08-11T15:35:29.605Z",
+    "statut": "envoye",
+    "demo": true
+  },
+  {
+    "id": "MSG-1754926529606-JSOCSUYD2",
+    "destinataire": "+221765936790",
+    "sujet": "✅ Colis livré - CG-TEST123",
+    "message": "TransCargo: Colis CG-TEST123 livré le 11/08/2025 à Aminata. Merci !",
+    "type": "sms",
+    "dateEnvoi": "2025-08-11T15:35:29.606Z",
+    "statut": "envoye",
+    "demo": true
+  },
+  {
+    "id": "MSG-1754926529607-PSSI2XZE1",
+    "destinataire": "+221777123456",
+    "sujet": "✅ Votre colis est arrivé - CG-TEST123",
+    "message": "TransCargo: Colis CG-TEST123 arrivé ! Récupérez-le dès maintenant. Expéditeur: Bachir",
+    "type": "sms",
+    "dateEnvoi": "2025-08-11T15:35:29.607Z",
+    "statut": "envoye",
+    "demo": true
+  },
+  {
+    "id": "MSG-1754926529609-H03DD7ZYG",
+    "destinataire": "+221765936790",
+    "sujet": "⚠️ Colis perdu - CG-TEST123",
+    "message": "TransCargo: Colis CG-TEST123 signalé perdu. Enquête en cours. Nous vous tiendrons informé. Désolé.",
+    "type": "sms",
+    "dateEnvoi": "2025-08-11T15:35:29.609Z",
+    "statut": "envoye",
+    "demo": true
+  },
+  {
+    "id": "MSG-1754926529610-9RRPWFA87",
+    "destinataire": "+221777123456",
+    "sujet": "⚠️ Colis perdu - CG-TEST123",
+    "message": "TransCargo: Colis CG-TEST123 de Bachir signalé perdu. Enquête en cours. Désolé.",
+    "type": "sms",
+    "dateEnvoi": "2025-08-11T15:35:29.610Z",
+    "statut": "envoye",
+    "demo": true
+  },
+  {
+    "id": "MSG-1755001400535-6H7IUL040",
+    "destinataire": "+221777000000",
+    "sujet": "✅ Colis créé - TEST-SMS-001",
+    "message": "TransCargo: Colis TEST-SMS-001 créé. Dest: Bachir. 2kg. Prix: 5000F",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T12:23:20.535Z",
+    "statut": "envoye",
+    "demo": true
+  },
+  {
+    "id": "MSG-1755001400541-F8EZ3NBJJ",
+    "destinataire": "+221765936790",
+    "sujet": "📦 Colis en route pour vous - TEST-SMS-001",
+    "message": "TransCargo: Colis TEST-SMS-001 envoyé par Service Test. 2kg. Suivi sur notre site.",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T12:23:20.541Z",
+    "statut": "envoye",
+    "demo": true
+  },
+  {
+    "id": "MSG-1755001594631-FLLMSCD0I",
+    "destinataire": "+221777000000",
+    "sujet": "✅ Colis créé - TEST-SMS-001",
+    "message": "TransCargo: Colis TEST-SMS-001 créé. Dest: Bachir. 2kg. Prix: 5000F",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T12:26:34.631Z",
+    "statut": "echec",
+    "erreur": "Test texts are temporarily disabled."
+  },
+  {
+    "id": "MSG-1755001595356-41XMETJ16",
+    "destinataire": "+221765936790",
+    "sujet": "📦 Colis en route pour vous - TEST-SMS-001",
+    "message": "TransCargo: Colis TEST-SMS-001 envoyé par Service Test. 2kg. Suivi sur notre site.",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T12:26:35.356Z",
+    "statut": "echec",
+    "erreur": "Test texts are temporarily disabled."
+  },
+  {
+    "id": "MSG-1755001925975-E303LV67M",
+    "destinataire": "+221777000000",
+    "sujet": "✅ Colis créé - TEST-SMS-001",
+    "message": "TransCargo: Colis TEST-SMS-001 créé. Dest: Bachir. 2kg. Prix: 5000F",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T12:32:05.975Z",
+    "statut": "echec",
+    "erreur": "Test texts are temporarily disabled."
+  },
+  {
+    "id": "MSG-1755001929895-EJNQ2ZR4B",
+    "destinataire": "+221785052217",
+    "sujet": "📦 Colis en route pour vous - TEST-SMS-001",
+    "message": "TransCargo: Colis TEST-SMS-001 envoyé par Service Test. 2kg. Suivi sur notre site.",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T12:32:09.895Z",
+    "statut": "envoye"
+  },
+  {
+    "id": "MSG-1755002422590-VFVS7JOCD",
+    "destinataire": "+221765936790",
+    "sujet": "✅ Colis créé - Z9RJSO9E",
+    "message": "TransCargo: Colis Z9RJSO9E créé. Dest: undefined. 200kg. Prix: 3954600000F",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T12:40:22.590Z",
+    "statut": "envoye",
+    "demo": true
+  },
+  {
+    "id": "MSG-1755002422592-WY21NKI72",
+    "destinataire": "+221785052217",
+    "sujet": "📦 Colis en route pour vous - Z9RJSO9E",
+    "message": "TransCargo: Colis Z9RJSO9E envoyé par oijorigjerij. 200kg. Suivi sur notre site.",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T12:40:22.592Z",
+    "statut": "envoye",
+    "demo": true
+  },
+  {
+    "id": "MSG-1755002716134-SO1ZYGPCP",
+    "destinataire": "bachir.uchiwa@example.com",
+    "sujet": "📦 Test notification TransCargo",
+    "message": "TransCargo: Colis TEST-EMAIL-001 créé avec succès !",
+    "type": "email",
+    "dateEnvoi": "2025-08-12T12:45:16.134Z",
+    "statut": "envoye",
+    "demo": true
+  },
+  {
+    "id": "MSG-1755004022250-XKGPTF3E9",
+    "destinataire": "785052217",
+    "sujet": "✅ Colis créé - 84P24F3T",
+    "message": "TransCargo: Colis 84P24F3T créé. Dest: undefined. 300kg. Prix: 7711470000F",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T13:07:02.250Z",
+    "statut": "echec",
+    "erreur": "Sorry, free SMS are disabled for this country due to abuse."
+  },
+  {
+    "id": "MSG-1755004026229-XYCJL87U3",
+    "destinataire": "765936790",
+    "sujet": "📦 Colis en route pour vous - 84P24F3T",
+    "message": "TransCargo: Colis 84P24F3T envoyé par Uchiwa. 300kg. Suivi sur notre site.",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T13:07:06.229Z",
+    "statut": "echec",
+    "erreur": "Sorry, free SMS are disabled for this country due to abuse."
+  },
+  {
+    "id": "MSG-1755004024080-16Z13R610",
+    "destinataire": "785052217",
+    "sujet": "✅ Colis créé - RNQKEX8K",
+    "message": "TransCargo: Colis RNQKEX8K créé. Dest: undefined. 300kg. Prix: 7711470000F",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T13:07:04.080Z",
+    "statut": "echec",
+    "erreur": "Sorry, free SMS are disabled for this country due to abuse."
+  },
+  {
+    "id": "MSG-1755004027758-TA726FM04",
+    "destinataire": "765936790",
+    "sujet": "📦 Colis en route pour vous - RNQKEX8K",
+    "message": "TransCargo: Colis RNQKEX8K envoyé par Uchiwa. 300kg. Suivi sur notre site.",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T13:07:07.758Z",
+    "statut": "echec",
+    "erreur": "Sorry, free SMS are disabled for this country due to abuse."
+  },
+  {
+    "id": "MSG-1755004028063-PLTSQKJMJ",
+    "destinataire": "pabassdiame76@gmail.com",
+    "sujet": "✅ Colis créé - RNQKEX8K",
+    "message": "TransCargo: Colis RNQKEX8K créé. Dest: undefined. 300kg. Prix: 7711470000F",
+    "type": "email",
+    "dateEnvoi": "2025-08-12T13:07:08.063Z",
+    "statut": "echec",
+    "erreur": "Invalid login: 534-5.7.9 Application-specific password required. For more information, go to\n534 5.7.9  https://support.google.com/mail/?p=InvalidSecondFactor 5b1f17b1804b1-459e5868fd7sm318524995e9.18 - gsmtp"
+  },
+  {
+    "id": "MSG-1755004026524-123RP42EH",
+    "destinataire": "pabassdiame76@gmail.com",
+    "sujet": "✅ Colis créé - 84P24F3T",
+    "message": "TransCargo: Colis 84P24F3T créé. Dest: undefined. 300kg. Prix: 7711470000F",
+    "type": "email",
+    "dateEnvoi": "2025-08-12T13:07:06.524Z",
+    "statut": "echec",
+    "erreur": "Invalid login: 534-5.7.9 Application-specific password required. For more information, go to\n534 5.7.9  https://support.google.com/mail/?p=InvalidSecondFactor ffacd0b85a97d-3b79c4530a8sm44121862f8f.38 - gsmtp"
+  },
+  {
+    "id": "MSG-1755004030316-5JAN60RRA",
+    "destinataire": "pabassdiame76@gmail.com",
+    "sujet": "📦 Colis en route pour vous - RNQKEX8K",
+    "message": "TransCargo: Colis RNQKEX8K envoyé par Uchiwa. 300kg. Suivi sur notre site.",
+    "type": "email",
+    "dateEnvoi": "2025-08-12T13:07:10.316Z",
+    "statut": "echec",
+    "erreur": "Invalid login: 534-5.7.9 Application-specific password required. For more information, go to\n534 5.7.9  https://support.google.com/mail/?p=InvalidSecondFactor 5b1f17b1804b1-458be70c5f7sm423783105e9.26 - gsmtp"
+  },
+  {
+    "id": "MSG-1755004030318-VO93FE2Z0",
+    "destinataire": "pabassdiame76@gmail.com",
+    "sujet": "📦 Colis en route pour vous - 84P24F3T",
+    "message": "TransCargo: Colis 84P24F3T envoyé par Uchiwa. 300kg. Suivi sur notre site.",
+    "type": "email",
+    "dateEnvoi": "2025-08-12T13:07:10.318Z",
+    "statut": "echec",
+    "erreur": "Invalid login: 534-5.7.9 Application-specific password required. For more information, go to\n534 5.7.9  https://support.google.com/mail/?p=InvalidSecondFactor ffacd0b85a97d-3b8fc28a830sm20245123f8f.16 - gsmtp"
+  },
+  {
+    "id": "MSG-1755004134288-B07AKQSZ3",
+    "destinataire": "785052217",
+    "sujet": "✅ Colis créé - 6SIUJ1XZ",
+    "message": "TransCargo: Colis 6SIUJ1XZ créé. Dest: undefined. 200kg. Prix: 7118280000F",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T13:08:54.288Z",
+    "statut": "echec",
+    "erreur": "Sorry, free SMS are disabled for this country due to abuse."
+  },
+  {
+    "id": "MSG-1755004137953-8ZKVU5P7A",
+    "destinataire": "765936790",
+    "sujet": "📦 Colis en route pour vous - 6SIUJ1XZ",
+    "message": "TransCargo: Colis 6SIUJ1XZ envoyé par zoijoaiej. 200kg. Suivi sur notre site.",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T13:08:57.953Z",
+    "statut": "echec",
+    "erreur": "Sorry, free SMS are disabled for this country due to abuse."
+  },
+  {
+    "id": "MSG-1755004138170-X46MRQLFP",
+    "destinataire": "pabassdiame76@gmail.com",
+    "sujet": "✅ Colis créé - 6SIUJ1XZ",
+    "message": "TransCargo: Colis 6SIUJ1XZ créé. Dest: undefined. 200kg. Prix: 7118280000F",
+    "type": "email",
+    "dateEnvoi": "2025-08-12T13:08:58.171Z",
+    "statut": "echec",
+    "erreur": "Invalid login: 534-5.7.9 Application-specific password required. For more information, go to\n534 5.7.9  https://support.google.com/mail/?p=InvalidSecondFactor 5b1f17b1804b1-459c58ed07fsm393763725e9.22 - gsmtp"
+  },
+  {
+    "id": "MSG-1755004141642-0CR9EXPHM",
+    "destinataire": "pabassdiame76@gmail.com",
+    "sujet": "📦 Colis en route pour vous - 6SIUJ1XZ",
+    "message": "TransCargo: Colis 6SIUJ1XZ envoyé par zoijoaiej. 200kg. Suivi sur notre site.",
+    "type": "email",
+    "dateEnvoi": "2025-08-12T13:09:01.642Z",
+    "statut": "echec",
+    "erreur": "Invalid login: 534-5.7.9 Application-specific password required. For more information, go to\n534 5.7.9  https://support.google.com/mail/?p=InvalidSecondFactor ffacd0b85a97d-3b79c3ac158sm45086877f8f.4 - gsmtp"
+  },
+  {
+    "id": "MSG-1755004866639-R5IX328IB",
+    "destinataire": "bachir.uchiwa@example.com",
+    "sujet": "📦 Test notification TransCargo",
+    "message": "TransCargo: Colis TEST-EMAIL-001 créé avec succès !",
+    "type": "email",
+    "dateEnvoi": "2025-08-12T13:21:06.639Z",
+    "statut": "envoye"
+  },
+  {
+    "id": "MSG-1755005386576-HNJHJYPEY",
+    "destinataire": "+221765936790",
+    "sujet": "✅ Colis créé - RLEJML7U",
+    "message": "TransCargo: Colis RLEJML7U créé. Dest: undefined. 3000kg. Prix: 901800000F",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T13:29:46.576Z",
+    "statut": "echec",
+    "erreur": "Test texts are temporarily disabled."
+  },
+  {
+    "id": "MSG-1755005390671-LV7J42Q72",
+    "destinataire": "+221765936790",
+    "sujet": "📦 Colis en route pour vous - RLEJML7U",
+    "message": "TransCargo: Colis RLEJML7U envoyé par DIAME. 3000kg. Suivi sur notre site.",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T13:29:50.671Z",
+    "statut": "echec",
+    "erreur": "Test texts are temporarily disabled."
+  },
+  {
+    "id": "MSG-1755005391315-0N0HA97SE",
+    "destinataire": "+221765936790",
+    "sujet": "✅ Colis créé - BW5Z3N19",
+    "message": "TransCargo: Colis BW5Z3N19 créé. Dest: undefined. 3000kg. Prix: 901800000F",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T13:29:51.315Z",
+    "statut": "echec",
+    "erreur": "Test texts are temporarily disabled."
+  },
+  {
+    "id": "MSG-1755005391687-VTVIWC6XU",
+    "destinataire": "+221765936790",
+    "sujet": "📦 Colis en route pour vous - BW5Z3N19",
+    "message": "TransCargo: Colis BW5Z3N19 envoyé par DIAME. 3000kg. Suivi sur notre site.",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T13:29:51.687Z",
+    "statut": "echec",
+    "erreur": "Test texts are temporarily disabled."
+  },
+  {
+    "id": "MSG-1755005391997-E53O2JCCO",
+    "destinataire": "pabassdiame76@gmail.com",
+    "sujet": "✅ Colis créé - BW5Z3N19",
+    "message": "TransCargo: Colis BW5Z3N19 créé. Dest: undefined. 3000kg. Prix: 901800000F",
+    "type": "email",
+    "dateEnvoi": "2025-08-12T13:29:51.997Z",
+    "statut": "envoye"
+  },
+  {
+    "id": "MSG-1755005391067-26BK2E93D",
+    "destinataire": "pabassdiame76@gmail.com",
+    "sujet": "✅ Colis créé - RLEJML7U",
+    "message": "TransCargo: Colis RLEJML7U créé. Dest: undefined. 3000kg. Prix: 901800000F",
+    "type": "email",
+    "dateEnvoi": "2025-08-12T13:29:51.067Z",
+    "statut": "envoye"
+  },
+  {
+    "id": "MSG-1755005395676-T2D9RHC3T",
+    "destinataire": "pabassdiame76@gmail.com",
+    "sujet": "📦 Colis en route pour vous - BW5Z3N19",
+    "message": "TransCargo: Colis BW5Z3N19 envoyé par DIAME. 3000kg. Suivi sur notre site.",
+    "type": "email",
+    "dateEnvoi": "2025-08-12T13:29:55.676Z",
+    "statut": "envoye"
+  },
+  {
+    "id": "MSG-1755005395995-SK2IMUWEU",
+    "destinataire": "pabassdiame76@gmail.com",
+    "sujet": "📦 Colis en route pour vous - RLEJML7U",
+    "message": "TransCargo: Colis RLEJML7U envoyé par DIAME. 3000kg. Suivi sur notre site.",
+    "type": "email",
+    "dateEnvoi": "2025-08-12T13:29:55.995Z",
+    "statut": "envoye"
+  },
+  {
+    "id": "MSG-1755007125134-HD9V74BV2",
+    "destinataire": "785052217",
+    "sujet": "✅ Colis créé - AZ2MLGN7",
+    "message": "TransCargo: Colis AZ2MLGN7 créé. Dest: undefined. 1300kg. Prix: 199290000F",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T13:58:45.134Z",
+    "statut": "echec",
+    "erreur": "Sorry, free SMS are disabled for this country due to abuse."
+  },
+  {
+    "id": "MSG-1755007128864-UXA1P4GNK",
+    "destinataire": "Joker",
+    "sujet": "📦 Colis en route pour vous - AZ2MLGN7",
+    "message": "TransCargo: Colis AZ2MLGN7 envoyé par Ndiaye. 1300kg. Suivi sur notre site.",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T13:58:48.864Z",
+    "statut": "echec",
+    "erreur": "Sorry, free SMS are disabled for this country due to abuse."
+  },
+  {
+    "id": "MSG-1755008068948-CTEWC0UK2",
+    "destinataire": "765936790",
+    "sujet": "✅ Colis créé - Y58O829Z",
+    "message": "TransCargo: Colis Y58O829Z créé. Dest: undefined. 1000kg. Prix: 452600000F",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T14:14:28.948Z",
+    "statut": "echec",
+    "erreur": "Sorry, free SMS are disabled for this country due to abuse."
+  },
+  {
+    "id": "MSG-1755008073088-LJJ41XIUI",
+    "destinataire": "785052217",
+    "sujet": "📦 Colis en route pour vous - Y58O829Z",
+    "message": "TransCargo: Colis Y58O829Z envoyé par Uchiwa. 1000kg. Suivi sur notre site.",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T14:14:33.088Z",
+    "statut": "echec",
+    "erreur": "Sorry, free SMS are disabled for this country due to abuse."
+  },
+  {
+    "success": true,
+    "result": {
+      "accepted": [
+        "pabassdiame76@gmail.com"
+      ],
+      "rejected": [],
+      "ehlo": [
+        "SIZE 35882577",
+        "8BITMIME",
+        "AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH",
+        "ENHANCEDSTATUSCODES",
+        "PIPELINING",
+        "CHUNKING",
+        "SMTPUTF8"
+      ],
+      "envelopeTime": 782,
+      "messageTime": 516,
+      "messageSize": 3300,
+      "response": "250 2.0.0 OK  1755008078 ffacd0b85a97d-3b79c3abf0csm43504073f8f.14 - gsmtp",
+      "envelope": {
+        "from": "pabassdiame76@gmail.com",
+        "to": [
+          "pabassdiame76@gmail.com"
+        ]
+      },
+      "messageId": "<1fe77f7d-aef3-2548-fe8c-7544be219bfc@gmail.com>"
+    },
+    "id": "MSG-1755008078587-TY5D6FY7S",
+    "destinataire": "pabassdiame76@gmail.com",
+    "sujet": "✅ Colis créé avec succès - Y58O829Z",
+    "type": "email",
+    "dateEnvoi": "2025-08-12T14:14:38.587Z",
+    "statut": "envoye"
+  },
+  {
+    "success": true,
+    "result": {
+      "accepted": [
+        "pabassdiame76@gmail.com"
+      ],
+      "rejected": [],
+      "ehlo": [
+        "SIZE 35882577",
+        "8BITMIME",
+        "AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH",
+        "ENHANCEDSTATUSCODES",
+        "PIPELINING",
+        "CHUNKING",
+        "SMTPUTF8"
+      ],
+      "envelopeTime": 241,
+      "messageTime": 561,
+      "messageSize": 3057,
+      "response": "250 2.0.0 OK  1755008080 5b1f17b1804b1-459dcb86d6asm347139055e9.5 - gsmtp",
+      "envelope": {
+        "from": "pabassdiame76@gmail.com",
+        "to": [
+          "pabassdiame76@gmail.com"
+        ]
+      },
+      "messageId": "<9a7a83df-0b14-1e05-147b-398c51f3d0d6@gmail.com>"
+    },
+    "id": "MSG-1755008080857-E93E1APFH",
+    "destinataire": "pabassdiame76@gmail.com",
+    "sujet": "📦 Un colis vous a été envoyé - Y58O829Z",
+    "type": "email",
+    "dateEnvoi": "2025-08-12T14:14:40.857Z",
+    "statut": "envoye"
+  },
+  {
+    "id": "MSG-1755011385730-PLQSHGKUU",
+    "destinataire": "785052217",
+    "sujet": "✅ Colis créé - ZB3JJEGX",
+    "message": "TransCargo: Colis ZB3JJEGX créé. Dest: undefined. 200kg. Prix: 50460000F",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T15:09:45.730Z",
+    "statut": "echec",
+    "erreur": "Sorry, free SMS are disabled for this country due to abuse."
+  },
+  {
+    "id": "MSG-1755011389621-GK04FTJBC",
+    "destinataire": "765936790",
+    "sujet": "📦 Colis en route pour vous - ZB3JJEGX",
+    "message": "TransCargo: Colis ZB3JJEGX envoyé par zeifhizu. 200kg. Suivi sur notre site.",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T15:09:49.621Z",
+    "statut": "echec",
+    "erreur": "Sorry, free SMS are disabled for this country due to abuse."
+  },
+  {
+    "success": true,
+    "result": {
+      "accepted": [
+        "pabassdiame76@gmail.com"
+      ],
+      "rejected": [],
+      "ehlo": [
+        "SIZE 35882577",
+        "8BITMIME",
+        "AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH",
+        "ENHANCEDSTATUSCODES",
+        "PIPELINING",
+        "CHUNKING",
+        "SMTPUTF8"
+      ],
+      "envelopeTime": 505,
+      "messageTime": 712,
+      "messageSize": 3298,
+      "response": "250 2.0.0 OK  1755011394 5b1f17b1804b1-458f713eb44sm430301525e9.14 - gsmtp",
+      "envelope": {
+        "from": "pabassdiame76@gmail.com",
+        "to": [
+          "pabassdiame76@gmail.com"
+        ]
+      },
+      "messageId": "<a618c96c-a436-a968-3e98-a53fe85705e3@gmail.com>"
+    },
+    "id": "MSG-1755011394926-D5CRN0SZ2",
+    "destinataire": "pabassdiame76@gmail.com",
+    "sujet": "✅ Colis créé avec succès - ZB3JJEGX",
+    "type": "email",
+    "dateEnvoi": "2025-08-12T15:09:54.926Z",
+    "statut": "envoye"
+  },
+  {
+    "success": true,
+    "result": {
+      "accepted": [
+        "pabassdiame76@gmail.com"
+      ],
+      "rejected": [],
+      "ehlo": [
+        "SIZE 35882577",
+        "8BITMIME",
+        "AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH",
+        "ENHANCEDSTATUSCODES",
+        "PIPELINING",
+        "CHUNKING",
+        "SMTPUTF8"
+      ],
+      "envelopeTime": 304,
+      "messageTime": 610,
+      "messageSize": 3060,
+      "response": "250 2.0.0 OK  1755011396 5b1f17b1804b1-459e58400f5sm296034525e9.2 - gsmtp",
+      "envelope": {
+        "from": "pabassdiame76@gmail.com",
+        "to": [
+          "pabassdiame76@gmail.com"
+        ]
+      },
+      "messageId": "<072d1c88-0f40-89ce-1e55-43863e6763e9@gmail.com>"
+    },
+    "id": "MSG-1755011396461-6IJM1NCWJ",
+    "destinataire": "pabassdiame76@gmail.com",
+    "sujet": "📦 Un colis vous a été envoyé - ZB3JJEGX",
+    "type": "email",
+    "dateEnvoi": "2025-08-12T15:09:56.461Z",
+    "statut": "envoye"
+  },
+  {
+    "id": "MSG-1755012851717-WQSQ6HUHQ",
+    "destinataire": "879839983",
+    "sujet": "✅ Colis créé - ZORR6L7T",
+    "message": "TransCargo: Colis ZORR6L7T créé. Dest: undefined. 300kg. Prix: 8190000F",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T15:34:11.717Z",
+    "statut": "echec",
+    "erreur": "Sorry, free SMS are disabled for this country due to abuse."
+  },
+  {
+    "id": "MSG-1755012855551-0CPTEO09Y",
+    "destinataire": "773883933",
+    "sujet": "📦 Colis en route pour vous - ZORR6L7T",
+    "message": "TransCargo: Colis ZORR6L7T envoyé par ezuhizeuhro. 300kg. Suivi sur notre site.",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T15:34:15.551Z",
+    "statut": "echec",
+    "erreur": "Sorry, free SMS are disabled for this country due to abuse."
+  },
+  {
+    "success": true,
+    "result": {
+      "accepted": [
+        "pabassdiame76@gmail.com"
+      ],
+      "rejected": [],
+      "ehlo": [
+        "SIZE 35882577",
+        "8BITMIME",
+        "AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH",
+        "ENHANCEDSTATUSCODES",
+        "PIPELINING",
+        "CHUNKING",
+        "SMTPUTF8"
+      ],
+      "envelopeTime": 306,
+      "messageTime": 711,
+      "messageSize": 3297,
+      "response": "250 2.0.0 OK  1755012860 4fb4d7f45d1cf-6182b1e51f8sm4047965a12.10 - gsmtp",
+      "envelope": {
+        "from": "pabassdiame76@gmail.com",
+        "to": [
+          "pabassdiame76@gmail.com"
+        ]
+      },
+      "messageId": "<f7a2c9c8-2f47-98a8-b66e-a3d9f90060e4@gmail.com>"
+    },
+    "id": "MSG-1755012860558-N3P067NPW",
+    "destinataire": "pabassdiame76@gmail.com",
+    "sujet": "✅ Colis créé avec succès - ZORR6L7T",
+    "type": "email",
+    "dateEnvoi": "2025-08-12T15:34:20.558Z",
+    "statut": "envoye"
+  },
+  {
+    "success": true,
+    "result": {
+      "accepted": [
+        "pabassdiame76@gmail.com"
+      ],
+      "rejected": [],
+      "ehlo": [
+        "SIZE 35882577",
+        "8BITMIME",
+        "AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH",
+        "ENHANCEDSTATUSCODES",
+        "PIPELINING",
+        "CHUNKING",
+        "SMTPUTF8"
+      ],
+      "envelopeTime": 277,
+      "messageTime": 610,
+      "messageSize": 3066,
+      "response": "250 2.0.0 OK  1755012861 a640c23a62f3a-af91a0763c8sm2209481966b.22 - gsmtp",
+      "envelope": {
+        "from": "pabassdiame76@gmail.com",
+        "to": [
+          "pabassdiame76@gmail.com"
+        ]
+      },
+      "messageId": "<7793bad0-11c6-77d9-69b0-2baaee06aa26@gmail.com>"
+    },
+    "id": "MSG-1755012861986-1QF0KIX03",
+    "destinataire": "pabassdiame76@gmail.com",
+    "sujet": "📦 Un colis vous a été envoyé - ZORR6L7T",
+    "type": "email",
+    "dateEnvoi": "2025-08-12T15:34:21.986Z",
+    "statut": "envoye"
+  },
+  {
+    "id": "MSG-1755014556804-JEDNBQDMU",
+    "destinataire": "7764774884",
+    "sujet": "✅ Colis créé - S5FZP09M",
+    "message": "TransCargo: Colis S5FZP09M créé. Dest: undefined. 200kg. Prix: 1020000F",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T16:02:36.804Z",
+    "statut": "echec",
+    "erreur": "Sorry, free SMS are disabled for this country due to abuse."
+  },
+  {
+    "id": "MSG-1755014561673-SRAJ8697F",
+    "destinataire": "7738389393",
+    "sujet": "📦 Colis en route pour vous - S5FZP09M",
+    "message": "TransCargo: Colis S5FZP09M envoyé par erfzrzr. 200kg. Suivi sur notre site.",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T16:02:41.673Z",
+    "statut": "echec",
+    "erreur": "Sorry, free SMS are disabled for this country due to abuse."
+  },
+  {
+    "success": true,
+    "result": {
+      "accepted": [
+        "pabassdiame76@gmail.com"
+      ],
+      "rejected": [],
+      "ehlo": [
+        "SIZE 35882577",
+        "8BITMIME",
+        "AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH",
+        "ENHANCEDSTATUSCODES",
+        "PIPELINING",
+        "CHUNKING",
+        "SMTPUTF8"
+      ],
+      "envelopeTime": 367,
+      "messageTime": 854,
+      "messageSize": 3297,
+      "response": "250 2.0.0 OK  1755014566 5b1f17b1804b1-459e583ff76sm300242975e9.5 - gsmtp",
+      "envelope": {
+        "from": "pabassdiame76@gmail.com",
+        "to": [
+          "pabassdiame76@gmail.com"
+        ]
+      },
+      "messageId": "<faf3d2e6-ead1-ebea-6d00-69d7b18a762f@gmail.com>"
+    },
+    "id": "MSG-1755014566683-F43G5MI14",
+    "destinataire": "pabassdiame76@gmail.com",
+    "sujet": "✅ Colis créé avec succès - S5FZP09M",
+    "type": "email",
+    "dateEnvoi": "2025-08-12T16:02:46.683Z",
+    "statut": "envoye"
+  },
+  {
+    "success": true,
+    "result": {
+      "accepted": [
+        "pabassdiame76@gmail.com"
+      ],
+      "rejected": [],
+      "ehlo": [
+        "SIZE 35882577",
+        "8BITMIME",
+        "AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH",
+        "ENHANCEDSTATUSCODES",
+        "PIPELINING",
+        "CHUNKING",
+        "SMTPUTF8"
+      ],
+      "envelopeTime": 294,
+      "messageTime": 951,
+      "messageSize": 3058,
+      "response": "250 2.0.0 OK  1755014568 ffacd0b85a97d-3b915deec6bsm926911f8f.7 - gsmtp",
+      "envelope": {
+        "from": "pabassdiame76@gmail.com",
+        "to": [
+          "pabassdiame76@gmail.com"
+        ]
+      },
+      "messageId": "<c505b9cc-673f-c558-d040-aa9cd905ce4b@gmail.com>"
+    },
+    "id": "MSG-1755014568396-Y8HA0M0OW",
+    "destinataire": "pabassdiame76@gmail.com",
+    "sujet": "📦 Un colis vous a été envoyé - S5FZP09M",
+    "type": "email",
+    "dateEnvoi": "2025-08-12T16:02:48.396Z",
+    "statut": "envoye"
+  },
+  {
+    "id": "MSG-1755016116208-ADFF3D0C4",
+    "destinataire": "773883899",
+    "sujet": "✅ Colis créé - U82TACCA",
+    "message": "TransCargo: Colis U82TACCA créé. Dest: undefined. 400kg. Prix: 107880000F",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T16:28:36.208Z",
+    "statut": "echec",
+    "erreur": "Sorry, free SMS are disabled for this country due to abuse."
+  },
+  {
+    "id": "MSG-1755016120031-1UF3SUWMQ",
+    "destinataire": "774848949",
+    "sujet": "📦 Colis en route pour vous - U82TACCA",
+    "message": "TransCargo: Colis U82TACCA envoyé par zjiufhzie. 400kg. Suivi sur notre site.",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T16:28:40.031Z",
+    "statut": "echec",
+    "erreur": "Sorry, free SMS are disabled for this country due to abuse."
+  },
+  {
+    "success": true,
+    "result": {
+      "accepted": [
+        "pabassdiame76@gmail.com"
+      ],
+      "rejected": [],
+      "ehlo": [
+        "SIZE 35882577",
+        "8BITMIME",
+        "AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH",
+        "ENHANCEDSTATUSCODES",
+        "PIPELINING",
+        "CHUNKING",
+        "SMTPUTF8"
+      ],
+      "envelopeTime": 293,
+      "messageTime": 924,
+      "messageSize": 3299,
+      "response": "250 2.0.0 OK  1755016125 ffacd0b85a97d-3b79c453ab0sm45118355f8f.44 - gsmtp",
+      "envelope": {
+        "from": "pabassdiame76@gmail.com",
+        "to": [
+          "pabassdiame76@gmail.com"
+        ]
+      },
+      "messageId": "<5ecc85b5-3cc5-2b4a-90fc-cc97c0a71e70@gmail.com>"
+    },
+    "id": "MSG-1755016125234-5BYE9GFMW",
+    "destinataire": "pabassdiame76@gmail.com",
+    "sujet": "✅ Colis créé avec succès - U82TACCA",
+    "type": "email",
+    "dateEnvoi": "2025-08-12T16:28:45.235Z",
+    "statut": "envoye"
+  },
+  {
+    "success": true,
+    "result": {
+      "accepted": [
+        "pabassdiame76@gmail.com"
+      ],
+      "rejected": [],
+      "ehlo": [
+        "SIZE 35882577",
+        "8BITMIME",
+        "AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH",
+        "ENHANCEDSTATUSCODES",
+        "PIPELINING",
+        "CHUNKING",
+        "SMTPUTF8"
+      ],
+      "envelopeTime": 304,
+      "messageTime": 618,
+      "messageSize": 3062,
+      "response": "250 2.0.0 OK  1755016126 ffacd0b85a97d-3b8f5d7deaasm24026568f8f.65 - gsmtp",
+      "envelope": {
+        "from": "pabassdiame76@gmail.com",
+        "to": [
+          "pabassdiame76@gmail.com"
+        ]
+      },
+      "messageId": "<ae0a74e8-b6a0-d2f1-6f90-889e370eba1f@gmail.com>"
+    },
+    "id": "MSG-1755016126767-9HMY2CDYY",
+    "destinataire": "pabassdiame76@gmail.com",
+    "sujet": "📦 Un colis vous a été envoyé - U82TACCA",
+    "type": "email",
+    "dateEnvoi": "2025-08-12T16:28:46.767Z",
+    "statut": "envoye"
+  },
+  {
+    "id": "MSG-1755021588846-SVCLTZ2BV",
+    "destinataire": "778399404",
+    "sujet": "✅ Colis créé - 4M3NFBV4",
+    "message": "TransCargo: Colis 4M3NFBV4 créé. Dest: undefined. 29kg. Prix: 3204500F",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T17:59:48.846Z",
+    "statut": "echec",
+    "erreur": "Sorry, free SMS are disabled for this country due to abuse."
+  },
+  {
+    "id": "MSG-1755021592467-DSPKKFU5G",
+    "destinataire": "773984989",
+    "sujet": "📦 Colis en route pour vous - 4M3NFBV4",
+    "message": "TransCargo: Colis 4M3NFBV4 envoyé par ziiuefhize. 29kg. Suivi sur notre site.",
+    "type": "sms",
+    "dateEnvoi": "2025-08-12T17:59:52.467Z",
+    "statut": "echec",
+    "erreur": "Sorry, free SMS are disabled for this country due to abuse."
+  },
+  {
+    "success": true,
+    "result": {
+      "accepted": [
+        "pabassdiame76@gmail.com"
+      ],
+      "rejected": [],
+      "ehlo": [
+        "SIZE 35882577",
+        "8BITMIME",
+        "AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH",
+        "ENHANCEDSTATUSCODES",
+        "PIPELINING",
+        "CHUNKING",
+        "SMTPUTF8"
+      ],
+      "envelopeTime": 657,
+      "messageTime": 610,
+      "messageSize": 3296,
+      "response": "250 2.0.0 OK  1755021597 5b1f17b1804b1-459e583ff76sm303472465e9.5 - gsmtp",
+      "envelope": {
+        "from": "pabassdiame76@gmail.com",
+        "to": [
+          "pabassdiame76@gmail.com"
+        ]
+      },
+      "messageId": "<a3ebe72e-3aa8-946a-a287-f3c255df09eb@gmail.com>"
+    },
+    "id": "MSG-1755021597968-PZV3EAHXK",
+    "destinataire": "pabassdiame76@gmail.com",
+    "sujet": "✅ Colis créé avec succès - 4M3NFBV4",
+    "type": "email",
+    "dateEnvoi": "2025-08-12T17:59:57.968Z",
+    "statut": "envoye"
+  },
+  {
+    "success": true,
+    "result": {
+      "accepted": [
+        "pabassdiame76@gmail.com"
+      ],
+      "rejected": [],
+      "ehlo": [
+        "SIZE 35882577",
+        "8BITMIME",
+        "AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH",
+        "ENHANCEDSTATUSCODES",
+        "PIPELINING",
+        "CHUNKING",
+        "SMTPUTF8"
+      ],
+      "envelopeTime": 237,
+      "messageTime": 582,
+      "messageSize": 3063,
+      "response": "250 2.0.0 OK  1755021600 5b1f17b1804b1-459e587e154sm330050895e9.27 - gsmtp",
+      "envelope": {
+        "from": "pabassdiame76@gmail.com",
+        "to": [
+          "pabassdiame76@gmail.com"
+        ]
+      },
+      "messageId": "<c8ebf5ab-4c57-c1c7-d2a6-5a08a5a5f771@gmail.com>"
+    },
+    "id": "MSG-1755021600757-0559AKTBI",
+    "destinataire": "pabassdiame76@gmail.com",
+    "sujet": "📦 Un colis vous a été envoyé - 4M3NFBV4",
+    "type": "email",
+    "dateEnvoi": "2025-08-12T18:00:00.757Z",
+    "statut": "envoye"
+  }
+]
