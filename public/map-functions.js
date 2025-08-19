@@ -1,5 +1,18 @@
 // Fonctions de gestion de la carte Leaflet
 
+// Fonction pour calculer la distance entre deux points géographiques (en km)
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Rayon de la Terre en kilomètres
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    const distance = R * c; // Distance en kilomètres
+    return Math.round(distance); // Arrondir à l'entier le plus proche
+}
+
 // Variables globales pour la carte
 let leafletMap = null;
 let currentMarker = null;
@@ -17,8 +30,9 @@ function openLocationSelector(field) {
         return;
     }
     
-    // Afficher le modal immédiatement
-    modal.style.display = 'block';
+    // Afficher le modal immédiatement avec centrage
+    modal.style.display = 'flex';
+    modal.classList.add('show');
     
     // Mettre à jour le titre selon le champ
     const title = document.getElementById('map-modal-title');
@@ -71,8 +85,8 @@ function initializeMap() {
             return;
         }
     
-    // Initialiser la carte sur Dakar, Sénégal
-    leafletMap = L.map('leaflet-map').setView([14.6937, -17.4441], 10);
+    // Initialiser la carte sur Dakar, Sénégal avec un meilleur centrage
+    leafletMap = L.map('leaflet-map').setView([14.6937, -17.4441], 12);
     
     // Ajouter les tuiles OpenStreetMap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -222,6 +236,7 @@ function confirmLocationSelection() {
 function closeMapModal() {
     const modal = document.getElementById('map-modal');
     modal.style.display = 'none';
+    modal.classList.remove('show');
     
     // Nettoyer la carte
     if (leafletMap) {

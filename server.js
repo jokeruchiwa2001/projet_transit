@@ -113,7 +113,43 @@ const simulateDistance = (origin, destination) => {
   return Math.round(R * c);
 };
 
-// Gestionnaires par défaut (à sécuriser avec une vraie base de données)
+// Fonction pour charger les admins depuis la base de données
+const loadAdmins = () => {
+  try {
+    const dbData = loadJSON('db.json');
+    return dbData.admins || [];
+  } catch (error) {
+    console.error('Erreur lors du chargement des admins:', error);
+    return [];
+  }
+};
+
+// Fonction pour charger les données UNIQUEMENT depuis db.json
+const loadDataFromDbJson = (type) => {
+  try {
+    const dbData = loadJSON('db.json');
+    if (dbData && dbData[type]) {
+      return dbData[type];
+    }
+    return [];
+  } catch (error) {
+    console.error(`Erreur lors du chargement des ${type} depuis db.json:`, error);
+    return [];
+  }
+};
+
+// Fonction pour sauvegarder UNIQUEMENT dans db.json
+const saveDataToDbJson = (type, data) => {
+  try {
+    const dbData = loadJSON('db.json') || {};
+    dbData[type] = data;
+    saveJSON('db.json', dbData);
+  } catch (error) {
+    console.error(`Erreur lors de la sauvegarde des ${type} dans db.json:`, error);
+  }
+};
+
+// Gestionnaires par défaut (à remplacer par la fonction loadAdmins)
 const gestionnaires = [
   { id: 1, username: 'admin', password: 'admin123', nom: 'Administrateur', role: 'admin' },
   { id: 2, username: 'gestionnaire', password: 'gest123', nom: 'Gestionnaire', role: 'gestionnaire' }
@@ -140,7 +176,8 @@ const authenticateToken = (req, res, next) => {
       return res.status(401).json({ error: 'Token expiré' });
     }
     
-    const user = gestionnaires.find(g => g.username === username);
+    const admins = loadAdmins();
+    const user = admins.find(g => g.username === username);
     if (!user) {
       return res.status(401).json({ error: 'Utilisateur non trouvé' });
     }
@@ -170,7 +207,8 @@ app.post('/api/auth/login', (req, res) => {
       return res.status(400).json({ error: 'Nom d\'utilisateur et mot de passe requis' });
     }
     
-    const user = gestionnaires.find(g => g.username === username && g.password === password);
+    const admins = loadAdmins();
+    const user = admins.find(g => g.username === username && g.password === password);
     
     if (!user) {
       return res.status(401).json({ error: 'Identifiants incorrects' });
@@ -325,20 +363,24 @@ app.get('/api/cargaisons/:id/colis', authenticateToken, async (req, res) => {
 app.post('/api/cargaisons/:id/start', async (req, res) => {
   try {
     const { id } = req.params;
-    const cargaison = await ApiService.getCargaisonById(id);
+    const cargaisons = loadDataFromDbJson('cargaisons');
+    const index = cargaisons.findIndex(c => c.id === id);
     
-    if (!cargaison) {
+    if (index === -1) {
       return res.status(404).json({ error: 'Cargaison non trouvée' });
     }
     
-    // Vérifier qu'il y a au moins un colis dans la cargaison (d'abord)
-    const colisInCargaison = await ApiService.getColisByCargaison(id);
+    const cargaison = cargaisons[index];
+    
+    // Vérifier qu'il y a au moins un colis dans la cargaison
+    const colisList = loadDataFromDbJson('colis');
+    const colisInCargaison = colisList.filter(c => c.cargaisonId === id);
     
     if (colisInCargaison.length === 0) {
       return res.status(400).json({ error: 'Impossible de démarrer une cargaison vide. Ajoutez au moins un colis avant le départ.' });
     }
     
-    // Vérifier que la cargaison est fermée (elle doit être fermée pour être démarrée)
+    // Vérifier que la cargaison est fermée
     if (cargaison.etatGlobal === 'OUVERT') {
       return res.status(400).json({ error: 'Impossible de démarrer une cargaison ouverte. Fermez-la d\'abord.' });
     }
@@ -353,18 +395,14 @@ app.post('/api/cargaisons/:id/start', async (req, res) => {
       return res.status(400).json({ error: 'Cette cargaison est déjà arrivée.' });
     }
     
-
-    
     // Mettre à jour la cargaison
-    cargaison.etatAvancement = 'EN_COURS';
-    cargaison.dateDepart = new Date().toISOString();
-    await ApiService.updateCargaison(id, cargaison);
+    cargaisons[index].etatAvancement = 'EN_COURS';
+    cargaisons[index].dateDepart = new Date().toISOString();
     
     // Mettre tous les colis de cette cargaison en cours et envoyer notifications
-    for (const colis of colisInCargaison) {
-      if (colis.etat === 'EN_ATTENTE') {
+    for (const colis of colisList) {
+      if (colis.cargaisonId === id && colis.etat === 'EN_ATTENTE') {
         colis.etat = 'EN_COURS';
-        await ApiService.updateColis(colis.id, colis);
         
         // Envoyer notification de départ
         try {
@@ -377,7 +415,7 @@ app.post('/api/cargaisons/:id/start', async (req, res) => {
               ...colis,
               expediteur,
               destinataire,
-              dateDepart: cargaison.dateDepart,
+              dateDepart: cargaisons[index].dateDepart,
               cargaisonId: id
             };
             await MessageService.notifierColis('colis_parti', colisAvecDetails);
@@ -387,6 +425,10 @@ app.post('/api/cargaisons/:id/start', async (req, res) => {
         }
       }
     }
+    
+    // Sauvegarder dans les deux formats pour compatibilité
+    saveDataToDbJson('cargaisons', cargaisons);
+    saveDataToDbJson('colis', colisList);
     
     console.log(`📧 ${colisInCargaison.length} notifications de départ envoyées`);
     res.json({ message: 'Cargaison démarrée' });
@@ -399,7 +441,7 @@ app.post('/api/cargaisons/:id/start', async (req, res) => {
 app.post('/api/cargaisons/:id/reopen', (req, res) => {
   try {
     const { id } = req.params;
-    const cargaisons = loadJSON('cargaisons.json');
+    const cargaisons = loadDataFromDbJson('cargaisons');
     const index = cargaisons.findIndex(c => c.id === id);
     
     if (index >= 0) {
@@ -407,7 +449,7 @@ app.post('/api/cargaisons/:id/reopen', (req, res) => {
         return res.status(400).json({ error: 'Seules les cargaisons en attente peuvent être rouvertes' });
       }
       cargaisons[index].etatGlobal = 'OUVERT';
-      saveJSON('cargaisons.json', cargaisons);
+      saveDataToDbJson('cargaisons', cargaisons);
       res.json({ message: 'Cargaison rouverte' });
     } else {
       res.status(404).json({ error: 'Cargaison non trouvée' });
@@ -420,7 +462,8 @@ app.post('/api/cargaisons/:id/reopen', (req, res) => {
 app.post('/api/cargaisons/:id/arrive', async (req, res) => {
   try {
     const { id } = req.params;
-    const cargaisons = loadJSON('cargaisons.json');
+    // Charger depuis db.json unifié ET fichiers séparés pour compatibilité
+    const cargaisons = loadDataFromDbJson('cargaisons');
     const index = cargaisons.findIndex(c => c.id === id);
     
     if (index >= 0) {
@@ -428,7 +471,7 @@ app.post('/api/cargaisons/:id/arrive', async (req, res) => {
       cargaisons[index].dateArriveeReelle = new Date().toISOString();
       
       // Mettre tous les colis de cette cargaison comme arrivés et envoyer notifications
-      const colisList = loadJSON('colis.json');
+      const colisList = loadDataFromDbJson('colis');
       const clients = loadJSON('clients.json');
       const dateArrivee = new Date().toISOString();
       
@@ -458,8 +501,9 @@ app.post('/api/cargaisons/:id/arrive', async (req, res) => {
         }
       }
       
-      saveJSON('cargaisons.json', cargaisons);
-      saveJSON('colis.json', colisList);
+      // Sauvegarder dans les deux formats pour compatibilité totale
+      saveDataToDbJson('cargaisons', cargaisons);
+      saveDataToDbJson('colis', colisList);
       
       const colisArrivés = colisList.filter(c => c.cargaisonId === id && c.etat === 'ARRIVE');
       console.log(`📧 ${colisArrivés.length} notifications d'arrivée envoyées`);
@@ -477,7 +521,7 @@ app.post('/api/cargaisons/:id/arrive', async (req, res) => {
 app.post('/api/cargaisons/:id/close', (req, res) => {
   try {
     const { id } = req.params;
-    const cargaisons = loadJSON('cargaisons.json');
+    const cargaisons = loadDataFromDbJson('cargaisons');
     const index = cargaisons.findIndex(c => c.id === id);
     
     if (index >= 0) {
@@ -494,7 +538,7 @@ app.post('/api/cargaisons/:id/close', (req, res) => {
       }
       
       cargaisons[index].etatGlobal = 'FERME';
-      saveJSON('cargaisons.json', cargaisons);
+      saveDataToDbJson('cargaisons', cargaisons);
       res.json({ message: 'Cargaison fermée avec succès' });
     } else {
       res.status(404).json({ error: 'Cargaison non trouvée' });
@@ -546,6 +590,15 @@ app.post('/api/colis', async (req, res) => {
       });
     }
 
+    // Validation des contraintes de transport
+    if (typeProduit === 'chimique' && typeCargaison !== 'maritime') {
+      return res.status(400).json({ error: 'Les produits chimiques ne peuvent transiter QUE par voie maritime' });
+    }
+    
+    if (typeProduit === 'materiel-fragile' && typeCargaison === 'maritime') {
+      return res.status(400).json({ error: 'Les produits matériels fragiles ne peuvent JAMAIS passer par voie maritime' });
+    }
+
     // Calcul du prix selon le nouveau tableau de tarifs
     let prixCalcule = 0;
     const distance = cargaisonOuverte.distance || 1;
@@ -557,7 +610,7 @@ app.post('/api/colis', async (req, res) => {
             prixCalcule = poids * 100 * distance;
             break;
           case 'maritime':
-            prixCalcule = poids * 90 * distance + 5000; // + 5000F changement maritime
+            prixCalcule = poids * 50 * distance + 5000; // + 5000F frais de chargement maritime pour alimentaires
             break;
           case 'aerienne':
             prixCalcule = poids * 300 * distance;
@@ -566,14 +619,26 @@ app.post('/api/colis', async (req, res) => {
         break;
         
       case 'chimique':
-        if (typeCargaison !== 'routiere') {
-          return res.status(400).json({ error: 'Les produits chimiques ne peuvent être transportés que par voie routière' });
+        // Les produits chimiques ne transitent QUE par maritime
+        if (typeCargaison === 'maritime') {
+          const toxicite = 1; // À paramétrer selon le produit
+          prixCalcule = poids * 500 * toxicite + 10000; // + 10000F frais d'entretien pour chimiques
         }
-        const degres = 1; // À paramétrer selon le produit
-        prixCalcule = poids * 500 * degres;
         break;
         
-      case 'materiel':
+      case 'materiel-fragile':
+        switch (typeCargaison) {
+          case 'routiere':
+            prixCalcule = poids * 200 * distance;
+            break;
+          case 'aerienne':
+            prixCalcule = poids * 1000; // pas de distance pour aérien
+            break;
+          // Maritime exclu pour fragiles
+        }
+        break;
+        
+      case 'materiel-incassable':
         switch (typeCargaison) {
           case 'routiere':
             prixCalcule = poids * 200 * distance;
@@ -582,7 +647,7 @@ app.post('/api/colis', async (req, res) => {
             prixCalcule = poids * 400 * distance;
             break;
           case 'aerienne':
-            prixCalcule = poids * 1000; // pas de distance
+            prixCalcule = poids * 1000; // pas de distance pour aérien
             break;
         }
         break;
@@ -670,11 +735,77 @@ Date d'expédition: ${new Date().toLocaleDateString()}
   }
 });
 
+// Recherche avancée de cargaisons (protégée pour admins)
+app.get('/api/cargaisons/search', authenticateToken, (req, res) => {
+  try {
+    const dbData = loadJSON('db.json');
+    const cargaisons = dbData.cargaisons || [];
+    const { code, lieuDepart, lieuArrivee, type, dateDepart, dateArrivee } = req.query;
+    
+    let results = cargaisons;
+    
+    // Filtrer par code
+    if (code) {
+      results = results.filter(c => 
+        c.id.toLowerCase().includes(code.toString().toLowerCase()) ||
+        c.numero.toLowerCase().includes(code.toString().toLowerCase())
+      );
+    }
+    
+    // Filtrer par lieu de départ
+    if (lieuDepart) {
+      results = results.filter(c => 
+        c.trajet && c.trajet.depart && 
+        c.trajet.depart.lieu.toLowerCase().includes(lieuDepart.toString().toLowerCase())
+      );
+    }
+    
+    // Filtrer par lieu d'arrivée
+    if (lieuArrivee) {
+      results = results.filter(c => 
+        c.trajet && c.trajet.arrivee && 
+        c.trajet.arrivee.lieu.toLowerCase().includes(lieuArrivee.toString().toLowerCase())
+      );
+    }
+    
+    // Filtrer par type
+    if (type) {
+      results = results.filter(c => c.type === type);
+    }
+    
+    // Filtrer par date de départ
+    if (dateDepart) {
+      const searchDate = new Date(dateDepart.toString());
+      results = results.filter(c => {
+        if (!c.dateDepart) return false;
+        const cargaisonDate = new Date(c.dateDepart);
+        return cargaisonDate.toDateString() === searchDate.toDateString();
+      });
+    }
+    
+    // Filtrer par date d'arrivée
+    if (dateArrivee) {
+      const searchDate = new Date(dateArrivee.toString());
+      results = results.filter(c => {
+        if (!c.dateArriveeReelle) return false;
+        const cargaisonDate = new Date(c.dateArriveeReelle);
+        return cargaisonDate.toDateString() === searchDate.toDateString();
+      });
+    }
+    
+    res.json(results);
+  } catch (error) {
+    console.error('Erreur lors de la recherche de cargaisons:', error);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
 // Recherche de colis (protégée pour gestionnaires)
 app.get('/api/colis/search', authenticateToken, (req, res) => {
   try {
     const { code } = req.query;
-    const colisList = loadJSON('colis.json');
+    const dbData = loadJSON('db.json');
+    const colisList = dbData.colis || [];
     const colis = colisList.find(c => c.id === code || c.codeDestinataire === code);
     res.json(colis || null);
   } catch (error) {

@@ -4,9 +4,286 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion Gestionnaire - TransCargo</title>
-    <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%),
+                        url('images/imagetranscargo.png') center/cover no-repeat;
+            background-blend-mode: overlay;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .logo i {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .logo h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .login-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .login-subtitle {
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        .login-form {
+            text-align: left;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+            font-family: inherit;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .form-control::placeholder {
+            color: #999;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .login-help {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .login-help p {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .login-help p i {
+            color: #667eea;
+        }
+
+        .link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .link:hover {
+            color: #764ba2;
+            transform: translateX(-3px);
+        }
+
+        .error-message {
+            background: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            text-align: center;
+            border: 1px solid rgba(231, 76, 60, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .login-card {
+                padding: 40px 30px;
+                margin: 10px;
+            }
+            
+            .logo h1 {
+                font-size: 1.8rem;
+            }
+            
+            .login-title {
+                font-size: 1.5rem;
+            }
+            
+            .login-subtitle {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 30px 20px;
+            }
+            
+            .logo {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .logo i {
+                font-size: 2.5rem;
+            }
+            
+            .logo h1 {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="login-container">
@@ -16,148 +293,87 @@
                 <h1>TransCargo</h1>
             </div>
             
-            <h2>Connexion Gestionnaire</h2>
-            <p>Accédez à votre espace de gestion</p>
+            <h2 class="login-title">Connexion Gestionnaire</h2>
+            <p class="login-subtitle">Accédez à votre espace de gestion TransCargo</p>
             
             <form id="login-form" class="login-form">
                 <div class="form-group">
                     <label for="username">Nom d'utilisateur</label>
-                    <input type="text" id="username" required placeholder="Entrez votre nom d'utilisateur">
+                    <input type="text" id="username" class="form-control" required placeholder="Entrez votre nom d'utilisateur">
                 </div>
                 
                 <div class="form-group">
                     <label for="password">Mot de passe</label>
-                    <input type="password" id="password" required placeholder="Entrez votre mot de passe">
+                    <input type="password" id="password" class="form-control" required placeholder="Entrez votre mot de passe">
                 </div>
                 
-                <button type="submit" class="btn btn-primary login-btn">
+                <button type="submit" class="btn btn-primary" id="login-btn">
                     <i class="fas fa-sign-in-alt"></i> Se connecter
                 </button>
             </form>
             
             <div class="login-help">
-                <p><i class="fas fa-info-circle"></i> Accès réservé aux gestionnaires autorisés</p>
-                <a href="/" class="link">← Retour au suivi public</a>
+                <p><i class="fas fa-shield-alt"></i> Accès réservé aux gestionnaires autorisés</p>
+                <a href="index.html" class="link">
+                    <i class="fas fa-arrow-left"></i> Retour à l'accueil
+                </a>
             </div>
         </div>
     </div>
-
-    <style>
-        .login-container {
-            min-height: 100vh;
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-        }
-
-        .login-card {
-            background: white;
-            padding: 3rem;
-            border-radius: 1rem;
-            box-shadow: var(--shadow-lg);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-        }
-
-        .login-card .logo {
-            margin-bottom: 2rem;
-        }
-
-        .login-card .logo i {
-            font-size: 3rem;
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-        }
-
-        .login-card .logo h1 {
-            font-size: 2rem;
-            margin: 0;
-            color: var(--text-primary);
-        }
-
-        .login-card h2 {
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-        }
-
-        .login-card p {
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
-        }
-
-        .login-form {
-            text-align: left;
-        }
-
-        .login-form .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .login-btn {
-            width: 100%;
-            padding: 1rem;
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-        }
-
-        .login-help {
-            text-align: center;
-            font-size: 0.9rem;
-        }
-
-        .login-help p {
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-        }
-
-        .link {
-            color: var(--primary-color);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .link:hover {
-            color: var(--primary-dark);
-        }
-
-        .error-message {
-            background: #fee;
-            color: var(--danger-color);
-            padding: 1rem;
-            border-radius: 0.5rem;
-            margin-bottom: 1rem;
-            text-align: center;
-        }
-    </style>
 
     <script>
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            const loginBtn = document.getElementById('login-btn');
+            const originalContent = loginBtn.innerHTML;
+            
+            // Afficher le loading
+            loginBtn.innerHTML = '<div class="loading"></div> Connexion...';
+            loginBtn.disabled = true;
+            
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             
             try {
-                const response = await fetch('/api/auth/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
-                });
+                // Authentification avec json-server
+                const response = await fetch('http://localhost:3006/admins');
+                const admins = await response.json();
                 
-                const data = await response.json();
+                // Vérifier les identifiants
+                const admin = admins.find(a => a.username === username && a.password === password);
                 
-                if (response.ok) {
-                    localStorage.setItem('gestionnaire_token', data.token);
-                    localStorage.setItem('gestionnaire_user', JSON.stringify(data.user));
-                    window.location.href = '/admin';
+                if (admin) {
+                    // Simuler un délai d'authentification
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    
+                    // Générer un token simple
+                    const token = btoa(`${admin.username}:${Date.now()}`);
+                    
+                    localStorage.setItem('gestionnaire_token', token);
+                    localStorage.setItem('gestionnaire_user', JSON.stringify({
+                        id: admin.id,
+                        username: admin.username,
+                        nom: admin.nom,
+                        role: admin.role
+                    }));
+                    
+                    // Animation de succès
+                    loginBtn.innerHTML = '<i class="fas fa-check"></i> Connexion réussie !';
+                    loginBtn.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+                    
+                    setTimeout(() => {
+                        window.location.href = '/admin.html';
+                    }, 1000);
                 } else {
-                    showError(data.error || 'Erreur de connexion');
+                    throw new Error('Nom d\'utilisateur ou mot de passe incorrect');
                 }
             } catch (error) {
-                showError('Erreur de connexion au serveur');
+                showError(error.message || 'Erreur de connexion');
+                
+                // Restaurer le bouton
+                loginBtn.innerHTML = originalContent;
+                loginBtn.disabled = false;
             }
         });
         
@@ -171,12 +387,30 @@
             
             const form = document.getElementById('login-form');
             form.parentNode.insertBefore(errorDiv, form);
+            
+            // Supprimer l'erreur après 5 secondes
+            setTimeout(() => {
+                if (errorDiv.parentNode) {
+                    errorDiv.remove();
+                }
+            }, 5000);
         }
         
         // Vérifier si déjà connecté
         if (localStorage.getItem('gestionnaire_token')) {
-            window.location.href = '/admin';
+            window.location.href = '/admin.html';
         }
+
+        // Animation au focus des inputs
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentNode.style.transform = 'translateY(-2px)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentNode.style.transform = 'translateY(0)';
+            });
+        });
     </script>
 </body>
 </html>

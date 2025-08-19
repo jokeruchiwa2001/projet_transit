@@ -1027,5 +1027,45 @@
     "type": "email",
     "dateEnvoi": "2025-08-12T18:00:00.757Z",
     "statut": "envoye"
+  },
+  {
+    "id": "MSG-1755171350135-3BCT0FIGY",
+    "destinataire": "778900938",
+    "sujet": "✅ Colis créé - I19QZVB8",
+    "message": "TransCargo: Colis I19QZVB8 créé. Dest: undefined. 240kg. Prix: 31680000F",
+    "type": "sms",
+    "dateEnvoi": "2025-08-14T11:35:50.135Z",
+    "statut": "envoye",
+    "demo": true
+  },
+  {
+    "id": "MSG-1755171350137-MZBD5H1OX",
+    "destinataire": "DIAME",
+    "sujet": "📦 Colis en route pour vous - I19QZVB8",
+    "message": "TransCargo: Colis I19QZVB8 envoyé par Sy. 240kg. Suivi sur notre site.",
+    "type": "sms",
+    "dateEnvoi": "2025-08-14T11:35:50.137Z",
+    "statut": "envoye",
+    "demo": true
+  },
+  {
+    "success": false,
+    "error": "Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials ffacd0b85a97d-3b79c3ac51asm51686341f8f.1 - gsmtp",
+    "id": "MSG-1755171353972-WV1T65PJZ",
+    "destinataire": "pabassdiame76@gmail.com",
+    "sujet": "✅ Colis créé avec succès - I19QZVB8",
+    "type": "email",
+    "dateEnvoi": "2025-08-14T11:35:53.972Z",
+    "statut": "echec"
+  },
+  {
+    "success": false,
+    "error": "Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to\n535 5.7.8  https://support.google.com/mail/?p=BadCredentials 5b1f17b1804b1-45a1c74ad27sm19083015e9.18 - gsmtp",
+    "id": "MSG-1755171354478-UY3AF063X",
+    "destinataire": "pabasssdiame76@gmail.com",
+    "sujet": "📦 Un colis vous a été envoyé - I19QZVB8",
+    "type": "email",
+    "dateEnvoi": "2025-08-14T11:35:54.478Z",
+    "statut": "echec"
   }
 ]

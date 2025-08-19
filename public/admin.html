@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://unpkg.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; connect-src 'self' https://nominatim.openstreetmap.org http://localhost:3006 http://127.0.0.1:3006 https://json-server-typescript-5.onrender.com; img-src 'self' data: https:;">
     <title>Administration - TransCargo</title>
-    <link rel="stylesheet" href="./styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Leaflet CSS et JS -->
@@ -14,6 +14,8 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
             crossorigin=""></script>
+    <!-- CSS modulaire -->
+    <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
     <header class="header">
@@ -23,7 +25,10 @@
                 <h1>TransCargo Admin</h1>
             </div>
             <nav class="nav">
-                <a href="#cargaisons" class="nav-link active" data-section="cargaisons">
+                <a href="#accueil" class="nav-link active" data-section="accueil">
+                    <i class="fas fa-home"></i> Accueil
+                </a>
+                <a href="#cargaisons" class="nav-link" data-section="cargaisons">
                     <i class="fas fa-boxes"></i> Cargaisons
                 </a>
                 <a href="#colis" class="nav-link" data-section="colis">
@@ -31,9 +36,6 @@
                 </a>
                 <a href="#recherche" class="nav-link" data-section="recherche">
                     <i class="fas fa-search"></i> Recherche
-                </a>
-                <a href="#statistiques" class="nav-link" data-section="statistiques">
-                    <i class="fas fa-chart-bar"></i> Statistiques
                 </a>
                 <button class="btn btn-danger" onclick="logout()">
                     <i class="fas fa-sign-out-alt"></i> Déconnexion
@@ -43,12 +45,123 @@
     </header>
 
     <main class="main">
-        <!-- Section Cargaisons -->
-        <section id="cargaisons" class="section active">
+        <!-- Section Accueil -->
+        <section id="accueil" class="section active">
             <div class="container">
-                <h2>Gestion des Cargaisons</h2>
+                <div class="hero">
+                    <h2>TransCargo - Administration</h2>
+                    <p>Tableau de bord administrateur pour la gestion complète des cargaisons maritimes, aériennes et routières</p>
+                </div>
                 
+                <div class="dashboard">
+                    <h2><i class="fas fa-chart-line"></i> Tableau de Bord</h2>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <i class="fas fa-boxes"></i>
+                            <h3 id="total-cargaisons">0</h3>
+                            <p>Cargaisons Actives</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-cube"></i>
+                            <h3 id="total-colis">0</h3>
+                            <p>Colis en Transit</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-euro-sign"></i>
+                            <h3 id="revenus-total">0F</h3>
+                            <p>Revenus Total</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-truck-loading"></i>
+                            <h3 id="en-cours">0</h3>
+                            <p>Livraisons en Cours</p>
+                        </div>
+                    </div>
+
+                    <!-- Statistiques détaillées -->
+                    <div class="detailed-stats" style="margin-top: 40px;">
+                        <h3><i class="fas fa-chart-pie"></i> Statistiques Détaillées</h3>
+                        
+                        <div class="stats-section">
+                            <h4><i class="fas fa-boxes"></i> État des Cargaisons</h4>
+                            <div class="stats-grid">
+                                <div class="stat-card secondary">
+                                    <i class="fas fa-check-circle"></i>
+                                    <h3 id="cargaisons-arrives">0</h3>
+                                    <p>Cargaisons Arrivées</p>
+                                </div>
+                                <div class="stat-card secondary">
+                                    <i class="fas fa-unlock"></i>
+                                    <h3 id="cargaisons-ouvertes">0</h3>
+                                    <p>Cargaisons Ouvertes</p>
+                                </div>
+                                <div class="stat-card secondary">
+                                    <i class="fas fa-lock"></i>
+                                    <h3 id="cargaisons-fermes">0</h3>
+                                    <p>Cargaisons Fermées</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stats-section">
+                            <h4><i class="fas fa-shipping-fast"></i> Types de Transport</h4>
+                            <div class="stats-grid">
+                                <div class="stat-card tertiary">
+                                    <i class="fas fa-ship"></i>
+                                    <h3 id="transport-maritime">0</h3>
+                                    <p>Transport Maritime</p>
+                                </div>
+                                <div class="stat-card tertiary">
+                                    <i class="fas fa-truck"></i>
+                                    <h3 id="transport-routiere">0</h3>
+                                    <p>Transport Routier</p>
+                                </div>
+                                <div class="stat-card tertiary">
+                                    <i class="fas fa-plane"></i>
+                                    <h3 id="transport-aerienne">0</h3>
+                                    <p>Transport Aérien</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stats-section">
+                            <h4><i class="fas fa-cube"></i> État des Colis</h4>
+                            <div class="stats-grid">
+                                <div class="stat-card success">
+                                    <i class="fas fa-check"></i>
+                                    <h3 id="colis-arrives">0</h3>
+                                    <p>Colis Arrivés</p>
+                                </div>
+                                <div class="stat-card warning">
+                                    <i class="fas fa-clock"></i>
+                                    <h3 id="colis-attente">0</h3>
+                                    <p>Colis en Attente</p>
+                                </div>
+                                <div class="stat-card danger">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <h3 id="colis-perdus">0</h3>
+                                    <p>Colis Perdus</p>
+                                </div>
+                                <div class="stat-card info">
+                                    <i class="fas fa-hand-holding"></i>
+                                    <h3 id="colis-recuperes">0</h3>
+                                    <p>Colis Récupérés</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section Cargaisons -->
+        <section id="cargaisons" class="section">
+            <div class="container">
                 <div class="form-section">
+                    <h2><i class="fas fa-boxes"></i> Gestion des Cargaisons</h2>
+                    
                     <h3><i class="fas fa-plus"></i> Créer une nouvelle cargaison</h3>
                     <form id="form-nouvelle-cargaison" class="form">
                         <div class="form-row">
@@ -63,7 +176,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="poids-max">Poids maximum (kg) :</label>
-                                <input type="number" id="poids-max" min="1" value="1000" required>
+                                <input type="number" id="poids-max" class="form-control" min="1" value="1000" required>
                             </div>
                         </div>
                         
@@ -71,9 +184,9 @@
                             <div class="form-group">
                                 <label>Lieu de départ :</label>
                                 <div class="location-input">
-                                    <input type="text" id="lieu-depart-display" readonly placeholder="Cliquez pour sélectionner sur la carte">
+                                    <input type="text" id="lieu-depart-display" class="form-control" readonly placeholder="Cliquez pour sélectionner sur la carte">
                                     <button type="button" id="btn-select-depart" class="btn btn-secondary" onclick="openLocationSelector('lieu-depart-display')">
-                                        <i class="fas fa-map-marker-alt"></i> Sélectionner sur la carte
+                                        <i class="fas fa-map-marker-alt"></i> Sélectionner
                                     </button>
                                     <input type="hidden" id="lieu-depart-lat">
                                     <input type="hidden" id="lieu-depart-lng">
@@ -82,9 +195,9 @@
                             <div class="form-group">
                                 <label>Lieu d'arrivée :</label>
                                 <div class="location-input">
-                                    <input type="text" id="lieu-arrivee-display" readonly placeholder="Cliquez pour sélectionner sur la carte">
+                                    <input type="text" id="lieu-arrivee-display" class="form-control" readonly placeholder="Cliquez pour sélectionner sur la carte">
                                     <button type="button" id="btn-select-arrivee" class="btn btn-secondary" onclick="openLocationSelector('lieu-arrivee-display')">
-                                        <i class="fas fa-map-marker-alt"></i> Sélectionner sur la carte
+                                        <i class="fas fa-map-marker-alt"></i> Sélectionner
                                     </button>
                                     <input type="hidden" id="lieu-arrivee-lat">
                                     <input type="hidden" id="lieu-arrivee-lng">
@@ -98,19 +211,17 @@
                     </form>
                 </div>
 
-                <div class="cargaisons-list">
-                    <div class="cargaisons-header">
+                <div class="form-section">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
                         <h3><i class="fas fa-list"></i> Cargaisons existantes</h3>
                         <div class="pagination-controls">
-                            <div class="items-per-page">
-                                <label for="items-per-page">Afficher :</label>
-                                <select id="items-per-page">
-                                    <option value="5">5 par page</option>
-                                    <option value="10" selected>10 par page</option>
-                                    <option value="15">15 par page</option>
-                                    <option value="20">20 par page</option>
-                                </select>
-                            </div>
+                            <label for="items-per-page">Afficher :</label>
+                            <select id="items-per-page">
+                                <option value="5">5 par page</option>
+                                <option value="10" selected>10 par page</option>
+                                <option value="15">15 par page</option>
+                                <option value="20">20 par page</option>
+                            </select>
                         </div>
                     </div>
                     <div id="liste-cargaisons" class="cards-grid">
@@ -126,69 +237,67 @@
         <!-- Section Nouveau Colis -->
         <section id="colis" class="section">
             <div class="container">
-                <h2>Enregistrer un nouveau colis</h2>
-                
-                <form id="form-nouveau-colis" class="form">
-                    <div class="form-section">
+                <div class="form-section">
+                    <h2><i class="fas fa-box"></i> Enregistrer un nouveau colis</h2>
+                    
+                    <form id="form-nouveau-colis" class="form">
                         <h4>Informations de l'expéditeur</h4>
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="exp-prenom">Prénom :</label>
-                                <input type="text" id="exp-prenom" required>
+                                <input type="text" id="exp-prenom" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label for="exp-nom">Nom :</label>
-                                <input type="text" id="exp-nom" required>
+                                <input type="text" id="exp-nom" class="form-control" required>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="exp-telephone">Téléphone :</label>
-                                <input type="tel" id="exp-telephone" required>
+                                <input type="tel" id="exp-telephone" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label for="exp-email">Email :</label>
-                                <input type="email" id="exp-email" required>
+                                <input type="email" id="exp-email" class="form-control" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="exp-adresse">Adresse :</label>
                             <textarea id="exp-adresse" required></textarea>
                         </div>
-                    </div>
 
-                    <div class="form-section">
                         <h4>Informations du destinataire</h4>
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="dest-nom">Nom complet :</label>
-                                <input type="text" id="dest-nom" required>
+                                <input type="text" id="dest-nom" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label for="dest-telephone">Téléphone :</label>
-                                <input type="tel" id="dest-telephone" required>
+                                <input type="tel" id="dest-telephone" class="form-control" required>
                             </div>
+                        </div>
+                        <div class="form-row">
                             <div class="form-group">
                                 <label for="dest-email">Email :</label>
-                                <input type="email" id="dest-email" required>
+                                <input type="email" id="dest-email" class="form-control" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="dest-adresse">Adresse :</label>
                             <textarea id="dest-adresse" required></textarea>
                         </div>
-                    </div>
 
-                    <div class="form-section">
                         <h4>Informations du colis</h4>
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="colis-nombre">Nombre de colis :</label>
-                                <input type="number" id="colis-nombre" min="1" value="1" required>
+                                <input type="number" id="colis-nombre" class="form-control" min="1" value="1" required>
                             </div>
                             <div class="form-group">
                                 <label for="colis-poids">Poids total (kg) :</label>
-                                <input type="number" id="colis-poids" min="0.1" step="0.1" required>
+                                <input type="number" id="colis-poids" class="form-control" min="0.1" step="0.1" required>
                             </div>
                         </div>
                         <div class="form-row">
@@ -197,10 +306,9 @@
                                 <select id="colis-type-produit" required>
                                     <option value="">Sélectionner...</option>
                                     <option value="alimentaire">Alimentaire</option>
-                                    <option value="materiel">Matériel</option>
+                                    <option value="materiel-fragile">Matériel fragile</option>
+                                    <option value="materiel-incassable">Matériel incassable</option>
                                     <option value="chimique">Chimique</option>
-                                    <option value="fragile">Fragile</option>
-                                    <option value="autre">Autre</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -215,69 +323,117 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="colis-cargaison">Cargaison disponible : *</label>
-                            <select id="colis-cargaison" required>
+                            <label for="colis-cargaison">Cargaison disponible :</label>
+                            <select id="colis-cargaison" class="form-control" required>
                                 <option value="">-- Veuillez sélectionner une cargaison --</option>
                             </select>
                         </div>
-                        <div id="cargaison-info" style="display: none; background: #f8f9fa; padding: 15px; border-radius: 5px; margin-top: 10px;">
+                        <div id="cargaison-info" style="display: none; background: #f8f9fa; padding: 15px; border-radius: 10px; margin-top: 10px;">
                             <h5 style="margin-bottom: 10px; color: #495057;">Cargaisons disponibles :</h5>
                             <div id="cargaison-list"></div>
                         </div>
-                    </div>
 
-                    <button type="submit" id="btn-enregistrer-colis" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Enregistrer le colis
-                    </button>
-                </form>
+                        <button type="submit" id="btn-enregistrer-colis" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Enregistrer le colis
+                        </button>
+                    </form>
+                </div>
             </div>
         </section>
 
         <!-- Section Recherche -->
         <section id="recherche" class="section">
             <div class="container">
-                <h2>Recherche et Gestion</h2>
-                
-                <div class="search-tabs">
-                    <button class="search-tab-button active" data-search-tab="colis-search">Recherche Colis</button>
-                    <button class="search-tab-button" data-search-tab="cargaison-search">Recherche Cargaison</button>
-                </div>
+                <div class="form-section">
+                    <h2><i class="fas fa-search"></i> Recherche et Gestion</h2>
+                    
+                    <div class="search-tabs">
+                        <button class="search-tab-button active" data-search-tab="colis-search">Recherche Colis</button>
+                        <button class="search-tab-button" data-search-tab="cargaison-search">Recherche Cargaison</button>
+                        <button class="search-tab-button" data-search-tab="colis-management">Gestion Colis</button>
+                    </div>
 
-                <div id="colis-search" class="search-tab-content active">
-                    <form id="form-recherche-colis" class="form">
-                        <div class="form-group">
-                            <label for="search-code-colis">Code du colis :</label>
-                            <input type="text" id="search-code-colis" placeholder="Ex: COL-ABC123">
-                        </div>
-                        <button type="submit" class="btn btn-secondary">
-                            <i class="fas fa-search"></i> Rechercher
-                        </button>
-                    </form>
-                    <div id="resultat-colis" class="search-results"></div>
-                </div>
+                    <div id="colis-search" class="search-tab-content active">
+                        <form id="form-recherche-colis" class="form">
+                            <div class="form-group">
+                                <label for="search-code-colis">Code du colis :</label>
+                                <input type="text" id="search-code-colis" class="form-control" placeholder="Ex: COL-ABC123">
+                            </div>
+                            <button type="submit" class="btn btn-secondary">
+                                <i class="fas fa-search"></i> Rechercher
+                            </button>
+                        </form>
+                        <div id="resultat-colis" class="search-results"></div>
+                    </div>
 
-                <div id="cargaison-search" class="search-tab-content">
-                    <form id="form-recherche-cargaison" class="form">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="search-code-cargaison">Code cargaison :</label>
-                                <input type="text" id="search-code-cargaison" placeholder="Ex: CG-ABC123">
+                    <div id="cargaison-search" class="search-tab-content">
+                        <form id="form-recherche-cargaison" class="form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="search-code-cargaison">Code cargaison :</label>
+                                    <input type="text" id="search-code-cargaison" class="form-control" placeholder="Ex: CG-ABC123">
+                                </div>
+                                <div class="form-group">
+                                    <label for="search-type">Type :</label>
+                                    <select id="search-type">
+                                        <option value="">Tous</option>
+                                        <option value="maritime">Maritime</option>
+                                        <option value="aerienne">Aérienne</option>
+                                        <option value="routiere">Routière</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="search-type">Type :</label>
-                                <select id="search-type">
-                                    <option value="">Tous</option>
-                                    <option value="maritime">Maritime</option>
-                                    <option value="aerienne">Aérienne</option>
-                                    <option value="routiere">Routière</option>
-                                </select>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="search-lieu-depart">Lieu de départ :</label>
+                                    <input type="text" id="search-lieu-depart" class="form-control" placeholder="Ex: Dakar">
+                                </div>
+                                <div class="form-group">
+                                    <label for="search-lieu-arrivee">Lieu d'arrivée :</label>
+                                    <input type="text" id="search-lieu-arrivee" class="form-control" placeholder="Ex: Thiès">
+                                </div>
                             </div>
-                        </div>
-                        <button type="submit" class="btn btn-secondary">
-                            <i class="fas fa-search"></i> Rechercher
-                        </button>
-                    </form>
-                    <div id="resultat-cargaison" class="search-results"></div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="search-date-depart">Date de départ :</label>
+                                    <input type="date" id="search-date-depart" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="search-date-arrivee">Date d'arrivée :</label>
+                                    <input type="date" id="search-date-arrivee" class="form-control">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-secondary">
+                                <i class="fas fa-search"></i> Rechercher
+                            </button>
+                        </form>
+                        <div id="resultat-cargaison" class="search-results"></div>
+                    </div>
+
+                    <div id="colis-management" class="search-tab-content">
+                        <h3><i class="fas fa-cogs"></i> Gestion des Colis</h3>
+                        <form id="form-gestion-colis" class="form">
+                            <div class="form-group">
+                                <label for="gestion-code-colis">Code du colis à gérer :</label>
+                                <input type="text" id="gestion-code-colis" class="form-control" placeholder="Ex: COL-ABC123 ou code destinataire" required>
+                            </div>
+                            <div class="management-actions">
+                                <button type="button" class="btn btn-success" onclick="colisManager.recupererColis()">
+                                    <i class="fas fa-check-circle"></i> Marquer Récupéré
+                                </button>
+                                <button type="button" class="btn btn-danger" onclick="colisManager.marquerPerdu()">
+                                    <i class="fas fa-exclamation-triangle"></i> Marquer Perdu
+                                </button>
+                                <button type="button" class="btn btn-warning" onclick="colisManager.archiverColis()">
+                                    <i class="fas fa-archive"></i> Archiver
+                                </button>
+                                <button type="button" class="btn btn-info" onclick="colisManager.afficherModalEtat()">
+                                    <i class="fas fa-edit"></i> Changer État
+                                </button>
+                            </div>
+                        </form>
+                        <div id="resultat-gestion" class="search-results"></div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -285,21 +441,11 @@
         <!-- Section Statistiques -->
         <section id="statistiques" class="section">
             <div class="container">
-                <h2><i class="fas fa-chart-bar"></i> Statistiques</h2>
-                
-                <div class="stats-grid" id="stats-grid">
-                    <!-- Les statistiques seront affichées ici -->
-                </div>
+                <div class="form-section">
+                    <div class="stats-grid" id="stats-grid">
+                        <!-- Les statistiques seront affichées ici -->
+                    </div>
 
-                <div class="charts-section">
-                    <div class="chart-container">
-                        <h3>Répartition par type de transport</h3>
-                        <canvas id="transport-chart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <h3>États des colis</h3>
-                        <canvas id="colis-chart"></canvas>
-                    </div>
                 </div>
             </div>
         </section>
@@ -307,7 +453,7 @@
 
     <!-- Modal pour la sélection de lieu -->
     <div id="map-modal" class="modal" style="display: none;">
-        <div class="modal-content" style="max-width: 900px; max-height: 90vh;">
+        <div class="modal-content" style="max-width: 1000px; width: 95vw; max-height: 95vh; height: 90vh;">
             <span class="close" onclick="closeMapModal()">&times;</span>
             <h3 id="map-modal-title">Sélectionner un lieu sur la carte</h3>
             
@@ -321,7 +467,7 @@
             </div>
             
             <!-- Conteneur de la carte -->
-            <div id="leaflet-map" style="height: 450px; width: 100%; margin: 1rem 0; border: 2px solid #ddd; border-radius: 8px; z-index: 1;"></div>
+            <div id="leaflet-map" style="height: 60vh; width: 100%; margin: 1rem 0; border: 2px solid #ddd; border-radius: 8px; z-index: 1;"></div>
             
             <!-- Informations sur le lieu sélectionné -->
             <div id="selected-location-info" style="margin: 15px 0; padding: 10px; background: #f8f9fa; border-radius: 8px; display: none;">
@@ -343,152 +489,82 @@
     <!-- Modal principal -->
     <div id="modal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <button class="modal-close" onclick="closeModal()">&times;</button>
             <div id="modal-body"></div>
         </div>
     </div>
 
-    <style>
-        .location-input {
-            display: flex;
-            gap: 0.5rem;
-            align-items: flex-end;
-        }
-        
-        .location-input input[type="text"] {
-            flex: 1;
-        }
-        
-        .location-input button {
-            white-space: nowrap;
-        }
-        
-        #map {
-            border-radius: 0.5rem;
-            box-shadow: var(--shadow);
-        }
-        
-        .nav button {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            margin-left: 1rem;
-        }
-        
-        .nav button:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
+    <!-- Modal pour changer l'état d'un colis -->
+    <div id="modal-change-etat" class="modal" style="display: none;">
+        <div class="modal-content">
+            <button class="modal-close" onclick="colisManager.fermerModalEtat()">&times;</button>
+            <h3><i class="fas fa-edit"></i> Changer l'état du colis</h3>
+            <form id="form-change-etat">
+                <div class="form-group">
+                    <label for="nouvel-etat">Nouvel état :</label>
+                    <select id="nouvel-etat" class="form-control" required>
+                        <option value="">Sélectionner un état...</option>
+                        <option value="EN_ATTENTE">En attente</option>
+                        <option value="EN_COURS">En cours</option>
+                        <option value="ARRIVE">Arrivé</option>
+                        <option value="RECUPERE">Récupéré</option>
+                        <option value="PERDU">Perdu</option>
+                        <option value="ARCHIVE">Archivé</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="commentaire-etat">Commentaire (optionnel) :</label>
+                    <textarea id="commentaire-etat" class="form-control" rows="3" placeholder="Raison du changement d'état..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Confirmer
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="colisManager.fermerModalEtat()">
+                        <i class="fas fa-times"></i> Annuler
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-        /* Styles pour la pagination */
-        .cargaisons-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .pagination-controls {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .items-per-page {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .items-per-page label {
-            font-size: 0.9rem;
-            color: #666;
-            white-space: nowrap;
-        }
-
-        .items-per-page select {
-            padding: 0.5rem;
-            border: 1px solid #ddd;
-            border-radius: 0.25rem;
-            background: white;
-            font-size: 0.9rem;
-        }
-
-        .pagination-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 2rem;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-
-        .pagination-info {
-            color: #666;
-            font-size: 0.9rem;
-            margin: 0 1rem;
-        }
-
-        .pagination-button {
-            padding: 0.5rem 0.75rem;
-            border: 1px solid #ddd;
-            background: white;
-            color: #333;
-            border-radius: 0.25rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.9rem;
-            min-width: 40px;
-            text-align: center;
-        }
-
-        .pagination-button:hover:not(:disabled) {
-            background: #f8f9fa;
-            border-color: #007bff;
-        }
-
-        .pagination-button.active {
-            background: #007bff;
-            color: white;
-            border-color: #007bff;
-        }
-
-        .pagination-button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .pagination-ellipsis {
-            padding: 0.5rem 0.25rem;
-            color: #666;
-        }
-
-        @media (max-width: 768px) {
-            .cargaisons-header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .pagination-controls {
-                justify-content: center;
-            }
-
-            .pagination-container {
-                gap: 0.25rem;
-            }
-
-            .pagination-button {
-                padding: 0.4rem 0.6rem;
-                font-size: 0.8rem;
-                min-width: 35px;
-            }
-        }
-    </style>
-
-    <!-- Scripts -->
+    <!-- Scripts modulaires -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="map-functions.js"></script>
-    <script src="admin.js"></script>
+    
+    <!-- Utilitaires - IMPORTANT: json-server-api en PREMIER -->
+    <script src="js/utils/json-server-api.js"></script>
+    <script src="js/utils/helpers.js"></script>
+    <script src="js/utils/notifications.js"></script>
+    <script src="js/utils/api.js"></script>
+    <script src="js/utils/modals.js"></script>
+    
+    <!-- Modules -->
+    <script src="js/modules/navigation.js"></script>
+    <script src="js/modules/cargaisons.js"></script>
+    
+    <!-- Services -->
+    <script src="js/services/app-initializer.js"></script>
+    <script src="js/services/event-manager.js"></script>
+    <script src="js/services/colis-action-manager.js"></script>
+    <script src="js/services/colis-manager.js"></script>
+    
+    <!-- Composants -->
+    <script src="js/components/cargaison-details.js"></script>
+    
+    <!-- Gestionnaires de formulaires -->
+    <script src="js/forms/form-manager.js"></script>
+    
+    <!-- Application principale -->
+    <script src="js/app.js"></script>
+    
+    <!-- Fonction de déconnexion globale -->
+    <script>
+        function logout() {
+            localStorage.removeItem('gestionnaire_token');
+            localStorage.removeItem('gestionnaire_user');
+            window.location.href = '/login.html';
+        }
+    </script>
 </body>
 </html>

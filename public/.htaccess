@@ -1,34 +1,17 @@
 RewriteEngine On
 
-# Rediriger tous les assets vers leurs emplacements
+# Rediriger les routes API cargaisons vers le script PHP
+RewriteRule ^api/cargaisons/([^/]+)/(close|reopen|start|arrive)/?$ api/cargaisons.php [QSA,L]
+
+# Rediriger les routes API colis vers le script PHP
+RewriteRule ^api/colis/([^/]+)/(recupere|perdu|recu)/?$ api/colis.php [QSA,L]
+RewriteRule ^api/colis/(search|track)/?$ api/colis.php [QSA,L]
+
+# Rediriger les statistiques vers le script PHP
+RewriteRule ^api/statistiques/?$ api/statistiques.php [QSA,L]
+
+# Rediriger toutes les autres routes API vers index.html pour une SPA
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_URI} ^/assets/
-RewriteRule ^assets/(.*)$ assets/$1 [L]
-
-# Rediriger toutes les autres requêtes vers index.php
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php [QSA,L]
-
-# Configuration pour les fichiers statiques
-<IfModule mod_expires.c>
-    ExpiresActive On
-    ExpiresByType text/css "access plus 1 month"
-    ExpiresByType application/javascript "access plus 1 month"
-    ExpiresByType image/png "access plus 1 year"
-    ExpiresByType image/jpg "access plus 1 year"
-    ExpiresByType image/jpeg "access plus 1 year"
-    ExpiresByType image/gif "access plus 1 year"
-    ExpiresByType image/ico "access plus 1 year"
-    ExpiresByType image/icon "access plus 1 year"
-    ExpiresByType text/plain "access plus 1 month"
-    ExpiresByType application/pdf "access plus 1 month"
-</IfModule>
-
-# Configuration de sécurité
-<IfModule mod_headers.c>
-    Header always set X-Content-Type-Options nosniff
-    Header always set X-Frame-Options DENY
-    Header always set X-XSS-Protection "1; mode=block"
-</IfModule>
+RewriteCond %{REQUEST_URI} !^/api/
+RewriteRule ^.*$ index.html [QSA,L]
